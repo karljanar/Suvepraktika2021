@@ -5,19 +5,19 @@
     <title>
         Personal Website - Code With Dary
     </title>
-    <link 
-        rel="stylesheet" 
+    <link
+        rel="stylesheet"
         href="style.css"
     />
-    <link 
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;900&display=swap" 
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;900&display=swap"
         rel="stylesheet"
     />
-    <link 
-        rel="stylesheet" 
+    <link
+        rel="stylesheet"
         href="//use.fontawesome.com/releases/v5.0.7/css/all.css"
     />
-    <link rel="stylesheet" href="{{assets('css/app.css')}}">
+    <link rel="stylesheet" href="{{assets('css/app.scss')}}">
 </head>
 
 <body>

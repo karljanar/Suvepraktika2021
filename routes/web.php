@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PagesController;
+use Inertia\Inertia;
+use App\Http\Controllers\AppController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,60 +14,22 @@ use App\Http\Controllers\PagesController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/ /*
-//Route that send back view
+*/
+
 Route::get('/', function () {
-    return view('home');
-});
-
-
-
-//Route to users- string
-Route::get('/users', function (){
-    return "welcome to the users page";
-});
-
-//Route that sends back array(json)
-Route::get('/users', function (){
-    return ['PHP', 'HTML', 'LARAVEL'];
-});
-
-//Route to users - JSON object
-Route::get('/users', function (){
-    return response()->json([
-        'name' => 'janar',
-        'asjad' => 'asi'
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
     ]);
 });
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->name('dashboard');
 
-//Route to users - function
-
-Route::get('/users', function (){
-    return redirect('/');
-});*/
-
-//Laravel 8 new
-Route::get('/', [PagesController::class, 'index']);
-Route::get('/about', [PagesController::class, 'about']);
-
-
-//pattern is integer
-// Route::get('/products/{id}', 
-// [ProductsController::class, 'show'])->where('id', '[0-9]+');
-
-//string
-
-// Route::get('/products/{name}/{id}', 
-// [ProductsController::class, 'show'])->where([
-//     'name' => '[a-z]+',
-//     'id' => '[0-9]+'
-// ]);
-
-
-// Route::get('/products/about', [ProductsController::class, 'about']);
-//Laravel 8 new2
-//Route::get('/products', 'App\Http\Controllers\ProductsController@index');
-
-//before laravel 8 doesnt work anymore
-//Route::get('/products', 'ProductsController@index');
+Route::middleware(['auth:sanctum', 'verified'])->get('/apps', [AppController::class, 'index']);
+Route::post('/apps', [AppController::class, 'store']);
+Route::patch('/apps/edit/{id}', [AppController::class, 'update']);
+Route::delete('/apps/destroy/{id}', [AppController::class, 'destroy']);
