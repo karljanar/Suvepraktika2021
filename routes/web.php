@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\UserApppController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\AppController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/apps', [AppController::class, 'index']);
-Route::post('/apps', [AppController::class, 'store']);
-Route::patch('/apps/edit/{id}', [AppController::class, 'update']);
-Route::delete('/apps/destroy/{id}', [AppController::class, 'destroy']);
+Route::middleware(['auth:sanctum', 'verified'])->get('/apps', [UserApppController::class, 'index']);
+Route::post('/apps', [UserApppController::class, 'store']);
+Route::patch('/apps/edit/{id}', [UserApppController::class, 'update']);
+Route::delete('/apps/destroy/{id}', [UserApppController::class, 'destroy']);

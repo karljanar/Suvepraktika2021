@@ -22,26 +22,12 @@
 
                     </div>
                     <button @click="openModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa rakendus</button>
-                    <table class="table-fixed w-full">
-                    <tr class="bg-gray-100">
-                        <th class="px-4 py-2 w-20 border-2 border-gray-200 ">Raamistik</th>
-                        <th class="px-4 py-2 w-20 border-2 border-gray-200 ">Kokku</th>
-                    </tr>
-                    <tr>
-                        <th class="w-1/4 border-2 border-gray-200">Drupal</th>
-                        <th class="w-1/4 border-2 border-gray-200">{{dcount}}</th>
-                    </tr>
-                    <tr>
-                        <th class="w-1/4 border-2 border-gray-200">Wordpress</th>
-                        <th class="w-1/4 border-2 border-gray-200">{{wcount}}</th>
-                    </tr>
 
-                    </table>
 
                     <table class="table-fixed w-full">
                         <thead>
                         <tr class="bg-gray-100">
-                            <th class="px-4 py-2 w-20 border-2 border-gray-200 ">No.</th>
+                            <th class="px-4 py-2 w-20 border-2 border-gray-200 ">Nimetus</th>
                             <th class="px-4 py-2 border-2 border-gray-200">Raamistik</th>
                             <th class="px-4 py-2 border-2 border-gray-200">URL</th>
                             <th class="px-4 py-2 border-2 border-gray-200">Reaalne URL</th>
@@ -55,10 +41,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="row in data" :key="row.id">
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.id }}</td>
-                            <template v-for="val in scrape">
-                            <td v-if="row.version_scraper_id === val.id" class="w-1/4 border-2 border-gray-200">{{ val.application_name }}</td>
+                        <tr v-for="row in apps" :key="row.id">
+                            <td class="w-1/4 border-2 border-gray-200">{{ row.user_app_name }}</td>
+                            <template v-for="val in framework">
+                                <td v-if="row.version_scraper_id === val.id" class="w-1/4 border-2 border-gray-200">{{ val.framework_name }}</td>
                             </template>
                             <td class="w-1/4 border-2 border-gray-200">{{ row.app_url }}</td>
                             <td class="w-1/4 border-2 border-gray-200">{{ row.real_app_url }}</td>
@@ -100,13 +86,24 @@
 
                                         <div class="">
 
+                                            <div class="mb-4">
+
+                                                <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                       name="app_url"
+                                                       placeholder="Rakenduse nimetus"
+                                                       v-model="form.user_app_name">
+
+                                                <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
+
+                                            </div>
+
                                             <div class="mb-4" >
                                                 <label class="block shadow-5xl  w-80 italic placeholder-gray-500"> Raamistik</label>
                                                 <select name="version_scraper_id" id="version_scraper_id"
                                                         class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                         v-model="form.version_scraper_id">
 
-                                                    <option v-for="val in scrape" :value="val.id">{{val.application_name}}</option>
+                                                    <option v-for="val in framework" :value="val.id">{{val.framework_name}}</option>
 
                                                 </select>
 
@@ -132,7 +129,7 @@
                                                        placeholder="Rakenduse tegelik URL..."
                                                        v-model="form.real_app_url">
 
-                                            <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
+                                                <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
                                             </div>
 
                                             <div class="mb-4">
@@ -142,7 +139,7 @@
                                                        placeholder="Praegune versioon..."
                                                        v-model="form.current_version">
 
-                                            <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
+                                                <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
                                             </div>
 
                                             <div class="mb-4">
@@ -272,7 +269,7 @@ export default {
 
     },
 
-    props: ['data', 'scrape', 'errors', 'dcount', 'wcount'],
+    props: ['apps', 'framework', 'errors'],
 
     data() {
 
@@ -285,6 +282,8 @@ export default {
             form: {
 
                 version_scraper_id: null,
+
+                user_app_name: null,
 
                 real_app_url: null,
 
@@ -331,6 +330,8 @@ export default {
             this.form = {
 
                 version_scraper_id: null,
+
+                user_app_name: null,
 
                 real_app_url: null,
 
