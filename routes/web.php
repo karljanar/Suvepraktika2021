@@ -25,11 +25,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/apps', [UserApppController::class, 'index']);
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard',
+    [UserApppController::class, 'index'])
+    ->name('dashboard');
 Route::post('/apps', [UserApppController::class, 'store']);
 Route::patch('/apps/edit/{id}', [UserApppController::class, 'update']);
 Route::delete('/apps/destroy/{id}', [UserApppController::class, 'destroy']);
