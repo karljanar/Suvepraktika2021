@@ -29,11 +29,13 @@ class UserApppController extends Controller
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
         //dd($role[0]['role']);
         //var_dump($role[0]->role);
-        if ($role[0]->role == 'editor'){
-            $candel = 0;
-        } else {
-            $candel = 1;
+        $candel = 1;
+        if($role){
+            if ($role[0]->role == 'editor'){
+                $candel = 0;
+            }
         }
+
         $data = UserApps::where('teams_id', $user)->get();
         $frscrape = Frameworks::all();
 
