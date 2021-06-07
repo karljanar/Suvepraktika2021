@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Frameworks;
 use Illuminate\Http\Request;
 use App\Models\UserApps;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,13 @@ class UserApppController extends Controller
         $data = UserApps::where('teams_id', $user)->get();
         $frscrape = Frameworks::all();
 
+//        $data = DB::table('user_apps')
+//            ->join('frameworks', 'user_apps.version_scraper_id', '=', 'frameworks.id')
+//            ->select('user_apps.*')
+//            ->where('user_apps.teams_id', '=', $user)
+//            ->select('frameworks.framework_name')
+//            ->get();
+        //dd($kolm);
 //        $data = UserApps::find(1)->frameworks()->get();
 //        dd($data);
 
