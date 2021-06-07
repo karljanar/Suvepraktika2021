@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Frameworks;
 
+use App\Models\UserAppsArchive;
 use Illuminate\Http\Request;
 use App\Models\UserApps;
 use Illuminate\Support\Facades\DB;
@@ -24,10 +25,7 @@ class UserApppController extends Controller
 
     {
         $user = $request->user()->currentTeam->id;
-        //dd($request->user()->id);
-        //dd(DB::select('select role from team_user where user_id = ?', [$request->user()->id]));
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
-        //dd($role[0]['role']);
         //var_dump($role[0]->role);
         $candel = 1;
         if($role){
@@ -94,13 +92,10 @@ class UserApppController extends Controller
 
 
     /**
+ * Show the form for creating a new resource.
+ *
 
-     * Show the form for creating a new resource.
-
-     *
-
-     * @return Response
-
+     * @return \Illuminate\Http\RedirectResponse
      */
 
     public function update(Request $request, $id)
@@ -114,7 +109,23 @@ class UserApppController extends Controller
 
         ])->validate();
 
+        //dd($request);
 
+        $data = UserApps::where('id', $id)->get();
+        $archive = new UserAppsArchive();
+        //dd($data[0]);
+        $archive->user_app_name = $data[0]->user_app_name;
+        $archive->application_id = $id;
+        $archive->arc_real_app_url = $data[0]->real_app_url;
+        $archive->arc_app_url = $data[0]->app_url;
+        $archive->arc_current_version = $data[0]->current_version;
+        $archive->arc_app_loc_in_server = $data[0]->app_loc_in_server;
+        $archive->arc_comments = $data[0]->comments;
+        $archive->arc_service_subscriber_name = $data[0]->service_subscriber_name;
+        $archive->arc_technical_supervisor_name = $data[0]->technical_supervisor_name;
+        $archive->arc_content_supervisor_name = $data[0]->content_supervisor_name;
+
+        $archive->save();
 
 
         $app = UserApps::where('id', $id)->update([
