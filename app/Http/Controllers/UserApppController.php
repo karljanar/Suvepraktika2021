@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Frameworks;
+
 use Illuminate\Http\Request;
 use App\Models\UserApps;
 use Illuminate\Support\Facades\DB;
@@ -23,25 +24,23 @@ class UserApppController extends Controller
 
     {
         $user = $request->user()->currentTeam->id;
-        //dd($user);
+        //dd($request->user()->id);
+        //dd(DB::select('select role from team_user where user_id = ?', [$request->user()->id]));
+        $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
+        //dd($role[0]['role']);
+        //var_dump($role[0]->role);
+        if ($role[0]->role == 'editor'){
+            $candel = 0;
+        } else {
+            $candel = 1;
+        }
         $data = UserApps::where('teams_id', $user)->get();
         $frscrape = Frameworks::all();
 
-//        $data = DB::table('user_apps')
-//            ->join('frameworks', 'user_apps.version_scraper_id', '=', 'frameworks.id')
-//            ->select('user_apps.*')
-//            ->where('user_apps.teams_id', '=', $user)
-//            ->select('frameworks.framework_name')
-//            ->get();
-        //dd($kolm);
-//        $data = UserApps::find(1)->frameworks()->get();
-//        dd($data);
-
-
-
         return Inertia::render('Application', [
             'apps' => $data,
-            'framework' =>$frscrape
+            'framework' => $frscrape,
+            'canDelete' => $candel
         ]);
 
     }
