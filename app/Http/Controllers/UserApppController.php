@@ -24,6 +24,7 @@ class UserApppController extends Controller
     public function index(Request $request)
 
     {
+
         $user = $request->user()->currentTeam->id;
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
         //var_dump($role[0]->role);
@@ -114,6 +115,7 @@ class UserApppController extends Controller
         $data = UserApps::where('id', $id)->get();
         $archive = new UserAppsArchive();
         //dd($data[0]);
+        $archive->user_id = $request->user()->id;
         $archive->user_app_name = $data[0]->user_app_name;
         $archive->application_id = $id;
         $archive->arc_real_app_url = $data[0]->real_app_url;

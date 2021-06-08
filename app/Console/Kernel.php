@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,6 +25,25 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->call(function () {
+            $currentuserv = DB::select('select current_version, id, version_scraper_id from user_apps');
+            $newframeworkv = DB::select('select id, new_framework_version from frameworks');
+            foreach($currentuserv as $curver){
+                //var_dump($curver->current_version);
+                foreach ($newframeworkv as $newver){
+                    if($curver->version_scraper_id == $newver->id){
+                        if($curver->current_version != $newver->new_framework_version){
+                            DB::update('update user_apps set update_available = 1 where id = ?', [$curver->id]);
+                        }
+                    }
+                }
+//            if($curver->current_version != $newframeworkv){
+//                DB::up
+//            }
+            }
+
+
+        })->everyMinute();
         // $schedule->command('inspire')->hourly();
     }
 
