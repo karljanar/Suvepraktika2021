@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AppUpdateNotification;
+use App\Models\EmailNotifications;
 use App\Models\Frameworks;
 
 use App\Models\UserAppsArchive;
 use Illuminate\Http\Request;
 use App\Models\UserApps;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use PharIo\Manifest\Email;
+
 class UserApppController extends Controller
 {
 
@@ -25,11 +30,8 @@ class UserApppController extends Controller
 
     {
 
-//            if($curver->current_version != $newframeworkv){
-//                DB::up
-//            }
 
-        //var_dump($curr);
+        //var_dump($request->user()->email);
         $user = $request->user()->currentTeam->id;
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
         //var_dump($role[0]->role);
@@ -84,8 +86,14 @@ class UserApppController extends Controller
         $app->service_subscriber_name = $request->input('service_subscriber_name');
         $app->technical_supervisor_name = $request->input('technical_supervisor_name');
         $app->content_supervisor_name = $request->input('content_supervisor_name');
-
-        $app->save();
+//        $app->notify()->users_id = $request->user()->id;
+//
+//
+       $app->save();
+//
+//        $notif = new EmailNotifications();
+//        $notif->users_id = $request->user()->id;
+//        $notif->applications_id =
 
 
 

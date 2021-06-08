@@ -20,4 +20,8 @@ class UserApps extends Model
     public function frameworks(){
         return $this->belongsTo(Frameworks::class);
     }
+
+    public function notify(){
+        return $this->belongsToMany(EmailNotifications::class);
+    }
 }

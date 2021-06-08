@@ -16,10 +16,10 @@ class CreateEmailNotificationsTable extends Migration
         Schema::create('email_notifications', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('users_id');
-            $table->unsignedBigInteger('applications_id');
+            $table->unsignedBigInteger('user_apps_id');
             $table->boolean('notification_enabled');
             $table->timestamp('sent_at');
-            $table->foreign('applications_id')
+            $table->foreign('user_apps_id')
                 ->references('id')
                 ->on('user_apps')
                 ->onDelete('cascade');
