@@ -26,23 +26,19 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            $currentuserv = DB::select('select current_version, id, version_scraper_id from user_apps');
-            $newframeworkv = DB::select('select id, new_framework_version from frameworks');
-            foreach($currentuserv as $curver){
-                //var_dump($curver->current_version);
-                foreach ($newframeworkv as $newver){
-                    if($curver->version_scraper_id == $newver->id){
-                        if($curver->current_version != $newver->new_framework_version){
-                            DB::update('update user_apps set update_available = 1 where id = ?', [$curver->id]);
+            $currentuserv = DB::select('select
+            user_apps.current_version, user_apps.id, frameworks.new_framework_version,
+            frameworks.framework_name
+            from user_apps
+            join frameworks
+            on user_apps.version_scraper_id = frameworks.id');
+            foreach ($currentuserv as $curr){
+                if($curr->current_version != $curr->new_framework_version){
+                    DB::update('update user_apps set update_available = 1 where id = ?', [$curr->id]);
+                        } else {
+                            DB::update('update user_apps set update_available = 0 where id = ?', [$curr->id]);
                         }
-                    }
-                }
-//            if($curver->current_version != $newframeworkv){
-//                DB::up
-//            }
             }
-
-
         })->everyMinute();
         // $schedule->command('inspire')->hourly();
     }

@@ -25,6 +25,11 @@ class UserApppController extends Controller
 
     {
 
+//            if($curver->current_version != $newframeworkv){
+//                DB::up
+//            }
+
+        //var_dump($curr);
         $user = $request->user()->currentTeam->id;
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
         //var_dump($role[0]->role);
