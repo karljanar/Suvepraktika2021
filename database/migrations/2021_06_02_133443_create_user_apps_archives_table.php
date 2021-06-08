@@ -15,6 +15,7 @@ class CreateUserAppsArchivesTable extends Migration
     {
         Schema::create('user_apps_archives', function (Blueprint $table) {
             $table->id('id');
+            $table->unsignedBigInteger('user_id');
             $table->string('user_app_name');
             $table->unsignedBigInteger('application_id');
             $table->string('arc_real_app_url')->nullable();
@@ -29,6 +30,10 @@ class CreateUserAppsArchivesTable extends Migration
             $table->foreign('application_id')
                 ->references('id')
                 ->on('user_apps')
+                ->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade');
         });
     }
