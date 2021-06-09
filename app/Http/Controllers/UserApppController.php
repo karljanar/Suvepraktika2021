@@ -29,12 +29,8 @@ class UserApppController extends Controller
     public function index(Request $request)
 
     {
-
-
-        //var_dump($request->user()->email);
         $user = $request->user()->currentTeam->id;
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
-        //var_dump($role[0]->role);
         $candel = 1;
         if($role){
             if ($role[0]->role == 'editor'){
