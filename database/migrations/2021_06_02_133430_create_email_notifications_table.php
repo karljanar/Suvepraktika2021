@@ -18,7 +18,6 @@ class CreateEmailNotificationsTable extends Migration
             $table->unsignedBigInteger('users_id');
             $table->unsignedBigInteger('user_apps_id');
             $table->boolean('notification_enabled');
-            $table->timestamp('sent_at');
             $table->foreign('user_apps_id')
                 ->references('id')
                 ->on('user_apps')
