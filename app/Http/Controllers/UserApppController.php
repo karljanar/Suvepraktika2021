@@ -11,6 +11,7 @@ use App\Models\UserApps;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class UserApppController extends Controller
 {
@@ -137,9 +138,9 @@ class UserApppController extends Controller
         for($i = 0; $i<count($temparchive[0]); $i++){
             unset($tempnewc[0][$i]);
         }
-
+        $commenttime = Carbon::now();
         $username = (string)$request->user()->name;
-        $username = "[" .$username ."]: ";
+        $username = "[" .$username . " ".$commenttime ."]: ";
         $temparchive[0][] = $username;
         for($i = 0; $i<count($tempnewc[0]); $i++){
             $temparchive[0][] = array_values($tempnewc[0])[$i];
