@@ -30,24 +30,24 @@ class UserApppController extends Controller
 
         $user = $request->user()->currentTeam->id;
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
-        $candel = 1;
+
+
+        $isadmin = 1;
         if($role){
             if ($role[0]->role == 'editor'){
-                $candel = 0;
+                $isadmin = 0;
             }
         }
 
+
         $data = UserApps::where('teams_id', $user)->get();
-        $frscrape = Frameworks::all();
-        $archive = UserAppsArchive::all();
-
-
+        $frameworks = Frameworks::all();
 
 
         return Inertia::render('Application', [
             'apps' => $data,
-            'framework' => $frscrape,
-            'canDelete' => $candel
+            'framework' => $frameworks,
+            'isAdmin' => $isadmin
         ]);
 
     }
@@ -68,7 +68,12 @@ class UserApppController extends Controller
         Validator::make($request->all(), [
 
             'app_url' => ['required'],
-            'version_scraper_id' => ['required']
+            'version_scraper_id' => ['required'],
+            'user_app_name' => ['required'],
+            'app_loc_in_server' => ['required'],
+            'service_subscriber_name' => ['required'],
+            'technical_supervisor_name' => ['required'],
+            'content_supervisor_name' => ['required']
 
         ])->validate();
 
@@ -85,6 +90,8 @@ class UserApppController extends Controller
         $app->service_subscriber_name = $request->input('service_subscriber_name');
         $app->technical_supervisor_name = $request->input('technical_supervisor_name');
         $app->content_supervisor_name = $request->input('content_supervisor_name');
+
+        //TODO notifications enabled
 //        $app->notify()->users_id = $request->user()->id;
 //
 //
@@ -118,39 +125,47 @@ class UserApppController extends Controller
         Validator::make($request->all(), [
 
             'app_url' => ['required'],
-            'version_scraper_id' => ['required']
+            'version_scraper_id' => ['required'],
+            'user_app_name' => ['required'],
+            'app_loc_in_server' => ['required'],
+            'service_subscriber_name' => ['required'],
+            'technical_supervisor_name' => ['required'],
+            'content_supervisor_name' => ['required']
 
         ])->validate();
 
-        //dd($request);
 
         $data = UserApps::where('id', $id)->get();
-        $oldcomment = $data[0]->comments;
-        $newcomment = $request->input('comments');
-
-        $tempnewc = array();
-        array_push($tempnewc, preg_split('/\s+/', $newcomment, -1, PREG_SPLIT_NO_EMPTY));
-        $temparchive = array();
-        array_push($temparchive, preg_split('/\s+/', $oldcomment, -1, PREG_SPLIT_NO_EMPTY));
-        var_dump((count($tempnewc[0])-count($temparchive[0])));
 
 
-        for($i = 0; $i<count($temparchive[0]); $i++){
-            unset($tempnewc[0][$i]);
+        $old_comment = $data[0]->comments;
+        $new_comment = $request->input('comments');
+
+        $temp_new_comment = array();
+        array_push($temp_new_comment, preg_split('/\s+/', $new_comment, -1, PREG_SPLIT_NO_EMPTY));
+        $temp_old_comment = array();
+        array_push($temp_old_comment, preg_split('/\s+/', $old_comment, -1, PREG_SPLIT_NO_EMPTY));
+
+
+        for($i = 0; $i<count($temp_old_comment[0]); $i++){
+            unset($temp_new_comment[0][$i]);
         }
-        $commenttime = Carbon::now()->format('d-m-Y H:i:s');
+
+
+        $comment_time = Carbon::now()->format('d-m-Y H:i:s');
         $username = (string)$request->user()->name;
-        $username = "[" .$username . " ".$commenttime ."]: ";
-        $temparchive[0][] = $username;
-        for($i = 0; $i<count($tempnewc[0]); $i++){
-            $temparchive[0][] = array_values($tempnewc[0])[$i];
+        $username = "[" .$comment_time .", ".$username ."]: ";
+        $temp_old_comment[0][] = $username;
+
+
+        for($i = 0; $i<count($temp_new_comment[0]); $i++){
+            $temp_old_comment[0][] = array_values($temp_new_comment[0])[$i];
         }
 
-        $comment = implode(" ",$temparchive[0]);
+        $comment = implode(" ",$temp_old_comment[0]);
 
 
         $archive = new UserAppsArchive();
-        //dd($data[0]);
         $archive->user_id = $request->user()->id;
         $archive->user_app_name = $data[0]->user_app_name;
         $archive->application_id = $id;

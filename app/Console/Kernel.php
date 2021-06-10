@@ -1,5 +1,5 @@
 <?php
-
+//Kahuriga pole mõtet kärbest tappa
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -28,59 +28,66 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
 
-            $currentuserv = DB::select('select
+            $current_user_app_version = DB::select('select
             user_apps.current_version, user_apps.id, user_apps.user_app_name, frameworks.framework_name, frameworks.new_framework_version,
             frameworks.framework_name
             from user_apps
             join frameworks
             on user_apps.version_scraper_id = frameworks.id');
 
-            //Table not filling by default, so theres need for second query
-            $emailnot = DB::select('select email_notifications.id, notification_enabled, users.email, users.id,
+
+            $email_notifications = DB::select('select email_notifications.id, notification_enabled, users.email, users.id,
              user_apps.id as uapp_id
             from email_notifications join users on email_notifications.users_id = users.id
             join user_apps on email_notifications.user_apps_id = user_apps.id');
+
+
+
             $oldvdata = array();
-            foreach ($currentuserv as $curr){
-                if($curr->current_version != $curr->new_framework_version){
-                    DB::update('update user_apps set update_available = 1 where id = ?', [$curr->id]);
-                    foreach ($emailnot as $emails){
-                        if($emails->uapp_id == $curr->id && $emails->notification_enabled){
+            foreach ($current_user_app_version as $current_version){
+                //If framework version doesn't match the version of user app framework version
+                if($current_version->current_version != $current_version->new_framework_version){
+                    DB::update('update user_apps set update_available = 1 where id = ?', [$current_version->id]);
+                    foreach ($email_notifications as $emails){
+                        //If user has enabled notifications
+                        if($emails->uapp_id == $current_version->id && $emails->notification_enabled){
+                            //Contents of email and email address
                             $email = ["email" => $emails->email];
                             $maildata = [
-                                "appname" => $curr->user_app_name,
-                                "currentversion" => $curr->current_version,
-                                "newversion" => $curr->new_framework_version,
-                                "framework" => $curr->framework_name
+                                "appname" => $current_version->user_app_name,
+                                "currentversion" => $current_version->current_version,
+                                "newversion" => $current_version->new_framework_version,
+                                "framework" => $current_version->framework_name
                             ];
                             array_push($oldvdata, $email, $maildata );
                         }
 
                     }
                 } else {
-                    DB::update('update user_apps set update_available = 0 where id = ?', [$curr->id]);
+                    DB::update('update user_apps set update_available = 0 where id = ?', [$current_version->id]);
                 }
             }
-            $singleemail = array();
+            $single_email = array();
+            //Removes duplicate emails and adds all duplicate email contents to single array
             for($i = 0; $i<(count($oldvdata)); $i+=2){
-                if(empty($singleemail[$oldvdata[$i]["email"]])) $singleemail[$oldvdata[$i]["email"]] = array($oldvdata[$i+1]);
-                else $singleemail[$oldvdata[$i]["email"]][] = $oldvdata[$i+1];
+                if(empty($single_email[$oldvdata[$i]["email"]])) $single_email[$oldvdata[$i]["email"]] = array($oldvdata[$i+1]);
+                else $single_email[$oldvdata[$i]["email"]][] = $oldvdata[$i+1];
 
             }
 
-
-            for($i =0; $i<=count($singleemail); $i++){
-                $arr_key = key($singleemail);
+            //Gets email and email content from array and sends email to user
+            for($i =0; $i<=count($single_email); $i++){
+                $array_key = key($single_email);
                 $appname = array();
                 $currentversion = array();
                 $newversion = array();
                 $framework = array();
 
-                for($x = 0; $x<count($singleemail[$arr_key]); $x++) {
-                    array_push($appname, $singleemail[$arr_key][$x]["appname"]);
-                    array_push($currentversion, $singleemail[$arr_key][$x]["currentversion"]);
-                    array_push($newversion, $singleemail[$arr_key][$x]["newversion"]);
-                    array_push($framework, $singleemail[$arr_key][$x]["framework"]);
+                for($x = 0; $x<count($single_email[$array_key]); $x++) {
+                    array_push($appname, $single_email[$array_key][$x]["appname"]);
+                    array_push($currentversion, $single_email[$array_key][$x]["currentversion"]);
+                    array_push($newversion, $single_email[$array_key][$x]["newversion"]);
+                    array_push($framework, $single_email[$array_key][$x]["framework"]);
                 }
                 $maildata = [
                     "appname" => $appname,
@@ -89,15 +96,16 @@ class Kernel extends ConsoleKernel
                     "framework" => $framework
                 ];
 
-                Mail::send('emails.mail', $maildata, function($message) use ($arr_key) {
-                    $message->to($arr_key)
+                //Mail template resources/views/emails/mail.blade.php
+                Mail::send('emails.mail', $maildata, function($message) use ($array_key) {
+                    $message->to($array_key)
                         ->subject('Rakenduse raamistiku uuendus');
                     $message->from('t6naktests@gmail.com', 'Padjaklubl');
                 });
-                unset($singleemail[$arr_key]);
+                unset($single_email[$array_key]);
             }
-
-        })->everyFifteenMinutes();
+            //When does this task run https://laravel.com/docs/8.x/scheduling
+        })->everyMinute();
     }
 
     /**
