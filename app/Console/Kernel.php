@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
             frameworks.framework_name
             from user_apps
             join frameworks
-            on user_apps.version_scraper_id = frameworks.id');
+            on user_apps.framework_id = frameworks.id');
 
 
             $email_notifications = DB::select('select email_notifications.id, notification_enabled, users.email, users.id,
