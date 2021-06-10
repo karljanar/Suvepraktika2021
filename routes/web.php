@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserApppController;
+use App\Http\Controllers\UserAppController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,8 +26,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard',
-    [UserApppController::class, 'index'])
+    [UserAppController::class, 'index'])
     ->name('dashboard');
-Route::post('/apps', [UserApppController::class, 'store']);
-Route::patch('/apps/edit/{id}', [UserApppController::class, 'update']);
-Route::delete('/apps/destroy/{id}', [UserApppController::class, 'destroy']);
+Route::post('/apps', [UserAppController::class, 'store']);
+Route::patch('/apps/edit/{id}', [UserAppController::class, 'update']);
+Route::delete('/apps/destroy/{id}', [UserAppController::class, 'destroy']);

@@ -15,13 +15,13 @@ class CreateUserAppsTable extends Migration
     {
         Schema::create('user_apps', function (Blueprint $table) {
             $table->id('id');
-            $table->unsignedBigInteger('teams_id')->nullable();
-            $table->unsignedBigInteger('version_scraper_id')->nullable();
+            $table->unsignedBigInteger('teams_id');
+            $table->unsignedBigInteger('framework_id');
             $table->string('user_app_name');
-            $table->string('real_app_url')->nullable();
+            $table->string('real_app_url');
             $table->string('app_url');
             $table->string('current_version')->nullable();
-            $table->string('app_loc_in_server')->nullable();
+            $table->string('app_loc_in_server');
             $table->longText('comments')->nullable();
             $table->string('service_subscriber_name')->nullable();
             $table->string('technical_supervisor_name')->nullable();
@@ -29,7 +29,7 @@ class CreateUserAppsTable extends Migration
             $table->boolean('update_available')->nullable();
             $table->boolean('application_status')->nullable();
             $table->timestamps();
-            $table->foreign('version_scraper_id')
+            $table->foreign('framework_id')
                 ->references('id')
                 ->on('frameworks')
                 ->onDelete('cascade');
@@ -38,7 +38,7 @@ class CreateUserAppsTable extends Migration
                 ->on('teams')
                 ->onDelete('cascade');
         });
-        
+
     }
 
     /**

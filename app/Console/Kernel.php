@@ -42,7 +42,6 @@ class Kernel extends ConsoleKernel
             join user_apps on email_notifications.user_apps_id = user_apps.id');
 
 
-
             $oldvdata = array();
             foreach ($current_user_app_version as $current_version){
                 //If framework version doesn't match the version of user app framework version

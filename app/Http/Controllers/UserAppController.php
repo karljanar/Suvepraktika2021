@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\AppUpdateNotification;
 use App\Models\Frameworks;
 
 use App\Models\UserAppsArchive;
@@ -13,7 +12,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
-class UserApppController extends Controller
+class UserAppController extends Controller
 {
 
     /**
@@ -28,10 +27,10 @@ class UserApppController extends Controller
     {
 
 
-        $user = $request->user()->currentTeam->id;
+        $users_team = $request->user()->currentTeam->id;
+
+        //If user has role in current team, default = admin, if editor then deleting app is not allowed.
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
-
-
         $isadmin = 1;
         if($role){
             if ($role[0]->role == 'editor'){
@@ -40,12 +39,12 @@ class UserApppController extends Controller
         }
 
 
-        $data = UserApps::where('teams_id', $user)->get();
+        $users_team_apps = UserApps::where('teams_id', $users_team)->get();
         $frameworks = Frameworks::all();
 
 
         return Inertia::render('Application', [
-            'apps' => $data,
+            'apps' => $users_team_apps,
             'framework' => $frameworks,
             'isAdmin' => $isadmin
         ]);
@@ -65,22 +64,20 @@ class UserApppController extends Controller
 
     {
 
+        //Fields that are required
         Validator::make($request->all(), [
-
             'app_url' => ['required'],
-            'version_scraper_id' => ['required'],
+            'real_app_url' => ['required'],
+            'framework_id' => ['required'],
             'user_app_name' => ['required'],
-            'app_loc_in_server' => ['required'],
-            'service_subscriber_name' => ['required'],
-            'technical_supervisor_name' => ['required'],
-            'content_supervisor_name' => ['required']
+            'app_loc_in_server' => ['required']
 
         ])->validate();
 
-
+        //Gets all fields from request and saves it to database
         $app = new UserApps();
         $app->teams_id = $request->user()->currentTeam->id;
-        $app->version_scraper_id = $request->input('version_scraper_id');
+        $app->framework_id = $request->input('framework_id');
         $app->user_app_name = $request->input('user_app_name');
         $app->real_app_url = $request->input('real_app_url');
         $app->app_url = $request->input('app_url');
@@ -117,74 +114,74 @@ class UserApppController extends Controller
 
      * @return \Illuminate\Http\RedirectResponse
      */
-
+    //"Mu nimi on Mari Maasikas ja võin vabalt segast peksta"
     public function update(Request $request, $id)
 
     {
-
+        //Fields that are required
         Validator::make($request->all(), [
 
             'app_url' => ['required'],
-            'version_scraper_id' => ['required'],
+            'real_app_url' => ['required'],
+            'framework_id' => ['required'],
             'user_app_name' => ['required'],
-            'app_loc_in_server' => ['required'],
-            'service_subscriber_name' => ['required'],
-            'technical_supervisor_name' => ['required'],
-            'content_supervisor_name' => ['required']
+            'app_loc_in_server' => ['required']
 
         ])->validate();
 
 
-        $data = UserApps::where('id', $id)->get();
+        $users_team_apps = UserApps::where('id', $id)->get();
 
-
-        $old_comment = $data[0]->comments;
+        //Gets saved comment from database and new comment from request
+        $old_comment = $users_team_apps[0]->comments;
         $new_comment = $request->input('comments');
 
+        //Adds those two comments to array splitting whitespace
         $temp_new_comment = array();
         array_push($temp_new_comment, preg_split('/\s+/', $new_comment, -1, PREG_SPLIT_NO_EMPTY));
         $temp_old_comment = array();
         array_push($temp_old_comment, preg_split('/\s+/', $old_comment, -1, PREG_SPLIT_NO_EMPTY));
 
-
+        //Removes old comments from array and leaves just the new one
         for($i = 0; $i<count($temp_old_comment[0]); $i++){
             unset($temp_new_comment[0][$i]);
         }
 
-
+        //Current time and username, adds to array
         $comment_time = Carbon::now()->format('d-m-Y H:i:s');
         $username = (string)$request->user()->name;
         $username = "[" .$comment_time .", ".$username ."]: ";
         $temp_old_comment[0][] = $username;
 
-
+        //Adds time, username and new comment to array
         for($i = 0; $i<count($temp_new_comment[0]); $i++){
             $temp_old_comment[0][] = array_values($temp_new_comment[0])[$i];
         }
 
+        //Makes string from array
         $comment = implode(" ",$temp_old_comment[0]);
 
-
+        //Saves old values to archive
         $archive = new UserAppsArchive();
         $archive->user_id = $request->user()->id;
-        $archive->user_app_name = $data[0]->user_app_name;
+        $archive->user_app_name = $users_team_apps[0]->user_app_name;
         $archive->application_id = $id;
-        $archive->arc_real_app_url = $data[0]->real_app_url;
-        $archive->arc_app_url = $data[0]->app_url;
-        $archive->arc_current_version = $data[0]->current_version;
-        $archive->arc_app_loc_in_server = $data[0]->app_loc_in_server;
-        $archive->arc_comments = $data[0]->comments;
-        $archive->arc_service_subscriber_name = $data[0]->service_subscriber_name;
-        $archive->arc_technical_supervisor_name = $data[0]->technical_supervisor_name;
-        $archive->arc_content_supervisor_name = $data[0]->content_supervisor_name;
+        $archive->arc_real_app_url = $users_team_apps[0]->real_app_url;
+        $archive->arc_app_url = $users_team_apps[0]->app_url;
+        $archive->arc_current_version = $users_team_apps[0]->current_version;
+        $archive->arc_app_loc_in_server = $users_team_apps[0]->app_loc_in_server;
+        $archive->arc_comments = $users_team_apps[0]->comments;
+        $archive->arc_service_subscriber_name = $users_team_apps[0]->service_subscriber_name;
+        $archive->arc_technical_supervisor_name = $users_team_apps[0]->technical_supervisor_name;
+        $archive->arc_content_supervisor_name = $users_team_apps[0]->content_supervisor_name;
 
         $archive->save();
 
-
-        $app = UserApps::where('id', $id)->update([
+        //Updates users app
+        UserApps::where('id', $id)->update([
 
             'teams_id' => $request->user()->currentTeam->id,
-            'version_scraper_id' => $request->input('version_scraper_id'),
+            'framework_id' => $request->input('framework_id'),
             'user_app_name' => $request->input('user_app_name'),
             'real_app_url' => $request->input('real_app_url'),
             'app_url' => $request->input('app_url'),
@@ -215,7 +212,7 @@ class UserApppController extends Controller
 
     {
 
-
+        //Finds user app with given id and deletes it.
         $app = UserApps::find($id);
         $app->delete();
 

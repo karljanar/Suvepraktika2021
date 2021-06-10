@@ -44,7 +44,7 @@
                         <tr v-for="row in apps" :key="row.id">
                             <td class="w-1/4 border-2 border-gray-200">{{ row.user_app_name }}</td>
                             <template v-for="val in framework">
-                                <td v-if="row.version_scraper_id === val.id" class="w-1/4 border-2 border-gray-200">{{ val.framework_name }}</td>
+                                <td v-if="row.framework_id === val.id" class="w-1/4 border-2 border-gray-200">{{ val.framework_name }}</td>
                             </template>
                             <td class="w-1/4 border-2 border-gray-200">{{ row.app_url }}</td>
                             <td class="w-1/4 border-2 border-gray-200">{{ row.real_app_url }}</td>
@@ -99,9 +99,9 @@
 
                                             <div class="mb-4" >
                                                 <label class="block shadow-5xl  w-80 italic placeholder-gray-500"> Raamistik</label>
-                                                <select name="version_scraper_id" id="version_scraper_id"
+                                                <select name="framework_id" id="framework_id"
                                                         class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
-                                                        v-model="form.version_scraper_id">
+                                                        v-model="form.framework_id">
 
                                                     <option v-for="val in framework" :value="val.id">{{val.framework_name}}</option>
 
@@ -281,7 +281,7 @@ export default {
 
             form: {
 
-                version_scraper_id: null,
+                framework_id: null,
 
                 user_app_name: null,
 
@@ -329,7 +329,7 @@ export default {
 
             this.form = {
 
-                version_scraper_id: null,
+                framework_id: null,
 
                 user_app_name: null,
 
