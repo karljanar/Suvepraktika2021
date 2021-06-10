@@ -3,18 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AppUpdateNotification;
-use App\Models\EmailNotifications;
 use App\Models\Frameworks;
 
 use App\Models\UserAppsArchive;
 use Illuminate\Http\Request;
 use App\Models\UserApps;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
-use PharIo\Manifest\Email;
 
 class UserApppController extends Controller
 {
@@ -29,6 +25,8 @@ class UserApppController extends Controller
     public function index(Request $request)
 
     {
+
+
         $user = $request->user()->currentTeam->id;
         $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
         $candel = 1;
@@ -40,6 +38,10 @@ class UserApppController extends Controller
 
         $data = UserApps::where('teams_id', $user)->get();
         $frscrape = Frameworks::all();
+        $archive = UserAppsArchive::all();
+
+
+
 
         return Inertia::render('Application', [
             'apps' => $data,
@@ -122,6 +124,30 @@ class UserApppController extends Controller
         //dd($request);
 
         $data = UserApps::where('id', $id)->get();
+        $oldcomment = $data[0]->comments;
+        $newcomment = $request->input('comments');
+
+        $tempnewc = array();
+        array_push($tempnewc, preg_split('/\s+/', $newcomment, -1, PREG_SPLIT_NO_EMPTY));
+        $temparchive = array();
+        array_push($temparchive, preg_split('/\s+/', $oldcomment, -1, PREG_SPLIT_NO_EMPTY));
+        var_dump((count($tempnewc[0])-count($temparchive[0])));
+
+
+        for($i = 0; $i<count($temparchive[0]); $i++){
+            unset($tempnewc[0][$i]);
+        }
+
+        $username = (string)$request->user()->name;
+        $username = "[" .$username ."]: ";
+        $temparchive[0][] = $username;
+        for($i = 0; $i<count($tempnewc[0]); $i++){
+            $temparchive[0][] = array_values($tempnewc[0])[$i];
+        }
+
+        $comment = implode(" ",$temparchive[0]);
+
+
         $archive = new UserAppsArchive();
         //dd($data[0]);
         $archive->user_id = $request->user()->id;
@@ -148,7 +174,7 @@ class UserApppController extends Controller
             'app_url' => $request->input('app_url'),
             'current_version' => $request->input('current_version'),
             'app_loc_in_server' => $request->input('app_loc_in_server'),
-            'comments' => $request->input('comments'),
+            'comments' => $comment,
             'service_subscriber_name' => $request->input('service_subscriber_name'),
             'technical_supervisor_name' => $request->input('technical_supervisor_name'),
             'content_supervisor_name' => $request->input('content_supervisor_name')
