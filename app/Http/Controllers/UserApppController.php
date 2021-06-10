@@ -138,7 +138,7 @@ class UserApppController extends Controller
         for($i = 0; $i<count($temparchive[0]); $i++){
             unset($tempnewc[0][$i]);
         }
-        $commenttime = Carbon::now();
+        $commenttime = Carbon::now()->format('d-m-Y H:i:s');
         $username = (string)$request->user()->name;
         $username = "[" .$username . " ".$commenttime ."]: ";
         $temparchive[0][] = $username;
