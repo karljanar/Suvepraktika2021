@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class UserAppController extends Controller
 {
@@ -103,9 +101,7 @@ class UserAppController extends Controller
 
 
         return redirect()->back()
-
             ->with('message', 'Rakendus on lisatud.');
-
     }
 
 
@@ -118,7 +114,6 @@ class UserAppController extends Controller
      */
     //"Mu nimi on Mari Maasikas ja võin vabalt segast peksta"
     public function update(Request $request, $id)
-
     {
         //Fields that are required
         Validator::make($request->all(), [
@@ -200,9 +195,7 @@ class UserAppController extends Controller
        ]);
 
         return redirect()->back()
-
             ->with('message', 'Rakendus edukalt uuendatud.');
-
     }
 
 
@@ -215,18 +208,13 @@ class UserAppController extends Controller
      */
 
     public function destroy($id)
-
     {
-
         //Finds user app with given id and deletes it.
         $app = UserApps::find($id);
         $app->delete();
 
         return redirect()->back()
             ->with('message', 'Rakendus eemaldatud.');
-
-
-
     }
 
 }

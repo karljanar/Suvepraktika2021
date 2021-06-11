@@ -102,7 +102,7 @@ class Kernel extends ConsoleKernel
                 Mail::send('emails.mail', $maildata, function($message) use ($array_key) {
                     $message->to($array_key)
                         ->subject('Rakenduse raamistiku uuendus');
-                    $message->from($val = config('mail.mailers.smtp.username'), 'Padjaklubl');
+                    $message->from(config('mail.from.address'), config('mail.from.name'));
                 });
                 unset($single_email[$array_key]);
             }
