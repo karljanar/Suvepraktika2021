@@ -67,15 +67,17 @@
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.real_app_url }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_loc_in_server }}</td>
-                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.comments }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">
+                                <button @click="openModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Kommentaar</button>
+                            </td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.service_subscriber_name }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.technical_supervisor_name }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.content_supervisor_name }}</td>
 
                             <td class="border flex space-x-4 px-1.5 py-2">
                                 <button @click="edit(row)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Muuda</button>
-                                <button @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Kustuta</button>
-                                
+                               
+                                <button v-if="isAdmin == 1" @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Kustuta</button>
                             </td>
                         </tr>
                         </tbody>
@@ -309,7 +311,7 @@ export default {
 		}
 	},
 
-    props: ['apps', 'framework', 'errors'],
+    props: ['apps', 'framework', 'errors', 'isAdmin'],
 
     data() {
 

@@ -17522,7 +17522,7 @@ __webpack_require__.r(__webpack_exports__);
       TogglePopup: TogglePopup
     };
   },
-  props: ['apps', 'framework', 'errors'],
+  props: ['apps', 'framework', 'errors', 'isAdmin'],
   data: function data() {
     return {
       editMode: false,
@@ -21475,9 +21475,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         /* TEXT */
         ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.app_loc_in_server), 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.comments), 1
-        /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.service_subscriber_name), 1
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+          onClick: _cache[3] || (_cache[3] = function ($event) {
+            return $options.openModal();
+          }),
+          "class": "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center"
+        }, "Kommentaar")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.service_subscriber_name), 1
         /* TEXT */
         ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.technical_supervisor_name), 1
         /* TEXT */
@@ -21490,14 +21493,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           "class": "bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 rounded"
         }, "Muuda", 8
         /* PROPS */
-        , ["onClick"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        , ["onClick"]), $props.isAdmin == 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", {
+          key: 0,
           onClick: function onClick($event) {
             return $options.deleteRow(row);
           },
           "class": "bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded"
         }, "Kustuta", 8
         /* PROPS */
-        , ["onClick"])])]);
+        , ["onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
       }), 128
       /* KEYED_FRAGMENT */
       ))])]), $data.isOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_24, [_hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" This element is to trick the browser into centering the modal contents. "), _hoisted_26, _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
@@ -21505,7 +21509,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "app_url",
         placeholder: "Rakenduse nimetus",
-        "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+        "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
           return $data.form.user_app_name = $event;
         })
       }, null, 512
@@ -21516,7 +21520,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         name: "framework_id",
         id: "framework_id",
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
-        "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+        "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
           return $data.form.framework_id = $event;
         })
       }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.framework, function (val) {
@@ -21536,7 +21540,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "app_url",
         placeholder: "Rakenduse URL...",
-        "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+        "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
           return $data.form.app_url = $event;
         })
       }, null, 512
@@ -21548,7 +21552,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "real_app_url",
         placeholder: "Rakenduse tegelik URL...",
-        "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+        "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
           return $data.form.real_app_url = $event;
         })
       }, null, 512
@@ -21560,7 +21564,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "current_version",
         placeholder: "Praegune versioon...",
-        "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+        "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
           return $data.form.current_version = $event;
         })
       }, null, 512
@@ -21572,7 +21576,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "app_loc_in_server",
         placeholder: "Rakenduse asukoht serveris...",
-        "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
+        "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
           return $data.form.app_loc_in_server = $event;
         })
       }, null, 512
@@ -21583,7 +21587,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "comments",
         placeholder: "Kommentaarid...",
-        "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
+        "onUpdate:modelValue": _cache[10] || (_cache[10] = function ($event) {
           return $data.form.comments = $event;
         })
       }, " ", 512
@@ -21595,7 +21599,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "service_subscriber_name",
         placeholder: "Rakenduse tellija nimi...",
-        "onUpdate:modelValue": _cache[10] || (_cache[10] = function ($event) {
+        "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
           return $data.form.service_subscriber_name = $event;
         })
       }, null, 512
@@ -21607,7 +21611,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "technical_supervisor_name",
         placeholder: "Rakenduse tehniline vastutaja...",
-        "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
+        "onUpdate:modelValue": _cache[12] || (_cache[12] = function ($event) {
           return $data.form.technical_supervisor_name = $event;
         })
       }, null, 512
@@ -21619,7 +21623,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500",
         name: "content_supervisor_name",
         placeholder: "Rakenduse sisu vastutaja...",
-        "onUpdate:modelValue": _cache[12] || (_cache[12] = function ($event) {
+        "onUpdate:modelValue": _cache[13] || (_cache[13] = function ($event) {
           return $data.form.content_supervisor_name = $event;
         })
       }, null, 512
@@ -21630,7 +21634,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "wire:click.prevent": "store()",
         type: "button",
         "class": "inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5",
-        onClick: _cache[13] || (_cache[13] = function ($event) {
+        onClick: _cache[14] || (_cache[14] = function ($event) {
           return $options.save($data.form);
         })
       }, " Salvesta ", 512
@@ -21639,13 +21643,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "wire:click.prevent": "store()",
         type: "button",
         "class": "inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5",
-        onClick: _cache[14] || (_cache[14] = function ($event) {
+        onClick: _cache[15] || (_cache[15] = function ($event) {
           return $options.update($data.form);
         })
       }, " Muuda ", 512
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.editMode]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_56, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        onClick: _cache[15] || (_cache[15] = function ($event) {
+        onClick: _cache[16] || (_cache[16] = function ($event) {
           return $options.closeModal();
         }),
         type: "button",
