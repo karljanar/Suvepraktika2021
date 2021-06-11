@@ -143,25 +143,29 @@ class UserAppController extends Controller
         array_push($temp_new_comment, preg_split('/\s+/', $new_comment, -1, PREG_SPLIT_NO_EMPTY));
         $temp_old_comment = array();
         array_push($temp_old_comment, preg_split('/\s+/', $old_comment, -1, PREG_SPLIT_NO_EMPTY));
+        if(strlen($old_comment) != strlen($new_comment)){
+            //Removes old comments from array and leaves just the new one
+            for($i = 0; $i<count($temp_old_comment[0]); $i++){
+                unset($temp_new_comment[0][$i]);
+            }
 
-        //Removes old comments from array and leaves just the new one
-        for($i = 0; $i<count($temp_old_comment[0]); $i++){
-            unset($temp_new_comment[0][$i]);
+            //Current time and username, adds to array
+            $comment_time = Carbon::now()->format('d-m-Y H:i:s');
+            $username = (string)$request->user()->name;
+            $username = "[" .$comment_time .", ".$username ."]: ";
+            $temp_old_comment[0][] = $username;
+
+            //Adds time, username and new comment to array
+            for($i = 0; $i<count($temp_new_comment[0]); $i++){
+                $temp_old_comment[0][] = array_values($temp_new_comment[0])[$i];
+            }
+
+            //Makes string from array
+            $comment = implode(" ",$temp_old_comment[0]);
+        } else {
+            $comment = $request->input('comments');
         }
 
-        //Current time and username, adds to array
-        $comment_time = Carbon::now()->format('d-m-Y H:i:s');
-        $username = (string)$request->user()->name;
-        $username = "[" .$comment_time .", ".$username ."]: ";
-        $temp_old_comment[0][] = $username;
-
-        //Adds time, username and new comment to array
-        for($i = 0; $i<count($temp_new_comment[0]); $i++){
-            $temp_old_comment[0][] = array_values($temp_new_comment[0])[$i];
-        }
-
-        //Makes string from array
-        $comment = implode(" ",$temp_old_comment[0]);
 
         //Saves old values to archive
         $archive = new UserAppsArchive();
