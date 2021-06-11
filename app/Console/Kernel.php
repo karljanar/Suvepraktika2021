@@ -2,6 +2,7 @@
 //Kahuriga pole mõtet kärbest tappa
 namespace App\Console;
 
+use App\Models\Frameworks;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
@@ -106,17 +107,26 @@ class Kernel extends ConsoleKernel
                 unset($single_email[$array_key]);
             }
             //When does this task run https://laravel.com/docs/8.x/scheduling
-        })->everyHour();
+        })->everyTenMinutes();
 
-//        $schedule->call(function () {
-//            $process = new Process("python3 storage/app/public/new_version_scraper.py \"{$text}\"");
-//            $process->run();
-//            if (!$process->isSuccessful()) {
-//                throw new ProcessFailedException($process);
-//            }
-//
-//            echo $process->getOutput();
-//        })->everyMinute();
+
+        $schedule->call(function () {
+            $process = new Process(["python3", "public/python/new_version_scraper.py"]);
+            $process->run();
+            if (!$process->isSuccessful()) {
+                var_dump("error");
+                throw new ProcessFailedException($process);
+            }
+            $result = $process->getOutput();
+            $result_array = array();
+            array_push($result_array, preg_split('/\s+/', $result, -1, PREG_SPLIT_NO_EMPTY));
+            $frameworks = Frameworks::all();
+            foreach ($frameworks as $framework){
+                if($framework->new_framework_version != $result_array[0][($framework->id) - 1]){
+                    DB::update('update frameworks set new_framework_version = ?, updated_at = ? where id = ?', [$result_array[0][($framework->id) - 1] , now(),$framework->id]);
+                }
+            }
+        })->everyMinute();
 
 
 
