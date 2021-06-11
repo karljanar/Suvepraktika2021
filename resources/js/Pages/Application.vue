@@ -52,7 +52,8 @@
                             </template>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_url }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.real_app_url }}</td>
-                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
+                            <td v-if="row.update_available === 1" class="bg-red-600 px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
+                            <td v-else class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_loc_in_server }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">
                                 <button @click="() => TogglePopup('buttonTrigger')">Kommentaar</button>		
