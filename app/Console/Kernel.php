@@ -6,6 +6,8 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class Kernel extends ConsoleKernel
 {
@@ -104,7 +106,20 @@ class Kernel extends ConsoleKernel
                 unset($single_email[$array_key]);
             }
             //When does this task run https://laravel.com/docs/8.x/scheduling
-        })->everyMinute();
+        })->everyHour();
+
+//        $schedule->call(function () {
+//            $process = new Process("python3 storage/app/public/new_version_scraper.py \"{$text}\"");
+//            $process->run();
+//            if (!$process->isSuccessful()) {
+//                throw new ProcessFailedException($process);
+//            }
+//
+//            echo $process->getOutput();
+//        })->everyMinute();
+
+
+
     }
 
     /**

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class UserAppController extends Controller
 {
@@ -25,6 +27,23 @@ class UserAppController extends Controller
     public function index(Request $request)
 
     {
+
+//        $process = new Process(["python3", "python/new_version_scraper.py"]);
+//        $process->run();
+//        if (!$process->isSuccessful()) {
+//            throw new ProcessFailedException($process);
+//        }
+//        $result = $process->getOutput();
+//        $result_array = array();
+//        array_push($result_array, preg_split('/\s+/', $result, -1, PREG_SPLIT_NO_EMPTY));
+//        $frameworks = Frameworks::all();
+//        foreach ($frameworks as $framwork){
+//            var_dump($framwork);
+//            //if($framwork->new_framework_version != )
+//        }
+//
+//
+//        dd( $result_array);
 
 
         $users_team = $request->user()->currentTeam->id;
