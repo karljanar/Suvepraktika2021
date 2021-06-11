@@ -4,9 +4,10 @@
 
         <div class="py-12">
 
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="max-w-full mx-auto sm:px-6 lg:px-8">
 
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
+
 
                     <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert" v-if="this.$page.props.flash.message">
 
@@ -23,11 +24,27 @@
                     </div>
                     <button @click="openModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa rakendus</button>
 
+                    <button @click="() => TogglePopup('buttonTrigger')">Open Popup</button>
+		
+		                        <Popup 
+		                        	v-if="popupTriggers.buttonTrigger" 
+		                        	:TogglePopup="() => TogglePopup('buttonTrigger')">
+		                        	<h2>My Button Popup</h2>
+		                        </Popup>
+		                        <Popup 
+		                        	v-if="popupTriggers.timedTrigger"
+		                        	:TogglePopup="() => TogglePopup('timedTrigger')">
+		                        	<h2>My Timed Popup</h2>
+		                        	<p>
+		                        		Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, accusantium sequi. Libero velit assumenda odio dolor repellendus earum debitis culpa voluptatum, illum beatae? Quasi, modi omnis repellat adipisci voluptate assumenda!
+		                        	</p>
+		                        </Popup>
+
 
                     <table class="table-fixed w-full">
                         <thead>
                         <tr class="bg-gray-100">
-                            <th class="px-4 py-2 w-20 border-2 border-gray-200 ">Nimetus</th>
+                            <th class="px-4 py-2 border-2 border-gray-200 ">Nimetus</th>
                             <th class="px-4 py-2 border-2 border-gray-200">Raamistik</th>
                             <th class="px-4 py-2 border-2 border-gray-200">URL</th>
                             <th class="px-4 py-2 border-2 border-gray-200">Reaalne URL</th>
@@ -42,22 +59,23 @@
                         </thead>
                         <tbody>
                         <tr v-for="row in apps" :key="row.id">
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.user_app_name }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.user_app_name }}</td>
                             <template v-for="val in framework">
-                                <td v-if="row.framework_id === val.id" class="w-1/4 border-2 border-gray-200">{{ val.framework_name }}</td>
+                                <td v-if="row.framework_id === val.id" class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ val.framework_name }}</td>
                             </template>
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.app_url }}</td>
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.real_app_url }}</td>
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.app_loc_in_server }}</td>
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.comments }}</td>
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.service_subscriber_name }}</td>
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.technical_supervisor_name }}</td>
-                            <td class="w-1/4 border-2 border-gray-200">{{ row.content_supervisor_name }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_url }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.real_app_url }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_loc_in_server }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.comments }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.service_subscriber_name }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.technical_supervisor_name }}</td>
+                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.content_supervisor_name }}</td>
 
-                            <td class="border px-4 py-2">
-                                <button @click="edit(row)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Muuda</button>
-                                <button @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Kustuta</button>
+                            <td class="border flex space-x-4 px-1.5 py-2">
+                                <button @click="edit(row)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Muuda</button>
+                                <button @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Kustuta</button>
+                                
                             </td>
                         </tr>
                         </tbody>
@@ -259,6 +277,10 @@ import AppLayout from './../Layouts/AppLayout'
 
 import Welcome from './../Jetstream/Welcome'
 
+import { ref } from 'vue';
+
+import Popup from './../components/Popup'
+
 export default {
 
     components: {
@@ -268,6 +290,24 @@ export default {
         Welcome,
 
     },
+
+    setup () {
+		const popupTriggers = ref({
+			buttonTrigger: false,
+			timedTrigger: false
+		});
+		const TogglePopup = (trigger) => {
+			popupTriggers.value[trigger] = !popupTriggers.value[trigger]
+		}
+		setTimeout(() => {
+			popupTriggers.value.timedTrigger = true;
+		}, 3000);
+		return {
+			Popup,
+			popupTriggers,
+			TogglePopup
+		}
+	},
 
     props: ['apps', 'framework', 'errors'],
 
