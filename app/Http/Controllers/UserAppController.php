@@ -222,7 +222,8 @@ class UserAppController extends Controller
         $app = UserApps::find($id);
         $app->delete();
 
-        return redirect()->back();
+        return redirect()->back()
+            ->with('message', 'Rakendus eemaldatud.');
 
 
 

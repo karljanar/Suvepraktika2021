@@ -102,12 +102,12 @@ class Kernel extends ConsoleKernel
                 Mail::send('emails.mail', $maildata, function($message) use ($array_key) {
                     $message->to($array_key)
                         ->subject('Rakenduse raamistiku uuendus');
-                    $message->from('t6naktests@gmail.com', 'Padjaklubl');
+                    $message->from($val = config('mail.mailers.smtp.username'), 'Padjaklubl');
                 });
                 unset($single_email[$array_key]);
             }
             //When does this task run https://laravel.com/docs/8.x/scheduling
-        })->everyTenMinutes();
+        })->everyMinute();
 
 
         //Checks for new version

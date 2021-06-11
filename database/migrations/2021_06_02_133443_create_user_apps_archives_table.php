@@ -29,7 +29,7 @@ class CreateUserAppsArchivesTable extends Migration
             $table->timestamps();
             $table->foreign('application_id')
                 ->references('id')
-                ->on('user_apps');
+                ->on('user_apps')->onDelete('cascade');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
