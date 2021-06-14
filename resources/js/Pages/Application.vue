@@ -24,21 +24,8 @@
                     </div>
                     <button @click="openModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa rakendus</button>
 
-                    <button @click="() => TogglePopup('buttonTrigger')">Open Popup</button>
-		
-		                        <Popup 
-		                        	v-if="popupTriggers.buttonTrigger" 
-		                        	:TogglePopup="() => TogglePopup('buttonTrigger')">
-		                        	<h2>My Button Popup</h2>
-		                        </Popup>
-		                        <Popup 
-		                        	v-if="popupTriggers.timedTrigger"
-		                        	:TogglePopup="() => TogglePopup('timedTrigger')">
-		                        	<h2>My Timed Popup</h2>
-		                        	<p>
-		                        		Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, accusantium sequi. Libero velit assumenda odio dolor repellendus earum debitis culpa voluptatum, illum beatae? Quasi, modi omnis repellat adipisci voluptate assumenda!
-		                        	</p>
-		                        </Popup>
+                    
+		                       
 
 
                     <table class="table-fixed w-full">
@@ -65,10 +52,17 @@
                             </template>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_url }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.real_app_url }}</td>
-                            <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
+                            <td v-if="row.update_available === 1" class="bg-red-600 px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
+                            <td v-else class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_loc_in_server }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">
-                                <button @click="openModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Kommentaar</button>
+                                <button @click="() => TogglePopup('buttonTrigger')">Kommentaar</button>		
+		                            <Popup 
+		                            	v-if="popupTriggers.buttonTrigger" 
+		                            	:TogglePopup="() => TogglePopup('buttonTrigger')">
+		                            	<ModalComment />
+                                        {{ row.comments }}
+		                            </Popup>
                             </td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.service_subscriber_name }}</td>
                             <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.technical_supervisor_name }}</td>
@@ -76,7 +70,6 @@
 
                             <td class="border flex space-x-4 px-1.5 py-2">
                                 <button @click="edit(row)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Muuda</button>
-                               
                                 <button v-if="isAdmin == 1" @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Kustuta</button>
                             </td>
                         </tr>
@@ -283,6 +276,8 @@ import { ref } from 'vue';
 
 import Popup from './../components/Popup'
 
+import ModalComment from './../components/ModalComment'
+
 export default {
 
     components: {
@@ -291,7 +286,13 @@ export default {
 
         Welcome,
 
+        Popup,
+
+        ModalComment
+
     },
+
+    props: ['apps', 'framework', 'errors', 'isAdmin'],
 
     setup () {
 		const popupTriggers = ref({
@@ -310,9 +311,7 @@ export default {
 			TogglePopup
 		}
 	},
-
-    props: ['apps', 'framework', 'errors', 'isAdmin'],
-
+    
     data() {
 
         return {
@@ -350,7 +349,7 @@ export default {
     },
 
     methods: {
-
+        
         openModal: function () {
 
             this.isOpen = true;
