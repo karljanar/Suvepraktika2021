@@ -28,4 +28,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard',
     ->name('dashboard');
 Route::post('/apps', [UserAppController::class, 'store']);
 Route::patch('/apps/edit/{id}', [UserAppController::class, 'update']);
+Route::patch('/apps/editNotification/{id}', [UserAppController::class, 'updateNotifications']);
 Route::delete('/apps/destroy/{id}', [UserAppController::class, 'destroy']);

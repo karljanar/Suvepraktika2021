@@ -19,7 +19,10 @@ def Drupal():
     print(currentVersion)
 
 Drupal()
-
+print("7")
+print("8")
+print("3")
+print("4")
 def Wordpress():
 
     url = "https://en.wikipedia.org/wiki/WordPress"
@@ -38,3 +41,4 @@ def Wordpress():
     print(currentVer)
 
 Wordpress()
+print("1")

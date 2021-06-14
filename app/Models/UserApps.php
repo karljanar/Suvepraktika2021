@@ -17,11 +17,11 @@ class UserApps extends Model
         'content_supervisor_name'];
 
 
-    public function frameworks(){
+    public function frameworksdb(){
         return $this->belongsTo(Frameworks::class);
     }
 
     public function notify(){
-        return $this->belongsToMany(EmailNotifications::class);
+        return $this->hasMany(EmailNotifications::class);
     }
 }

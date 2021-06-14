@@ -21,7 +21,11 @@ class Kernel extends ConsoleKernel
         //
     ];
 
-    /**
+    /**if($role){
+            if ($role == 'editor'){
+                $isadmin = 0;
+            }
+        }
      * Define the application's command schedule.
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule

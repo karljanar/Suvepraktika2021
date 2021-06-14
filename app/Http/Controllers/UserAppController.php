@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmailNotifications;
 use App\Models\Frameworks;
 
 use App\Models\UserAppsArchive;
 use Illuminate\Http\Request;
 use App\Models\UserApps;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -29,24 +31,27 @@ class UserAppController extends Controller
 
         $users_team = $request->user()->currentTeam->id;
 
+        $notifications = EmailNotifications::where('users_id', $request->user()->id)->get();
+        //var_dump($notifications);
         //If user has role in current team, default = admin, if editor then deleting app is not allowed.
-        $role = DB::select('select role from team_user where user_id = ?', [$request->user()->id]);
+        $role = $request->user()->teamRole($request->user()->currentTeam)->key;
         $isadmin = 1;
         if($role){
-            if ($role[0]->role == 'editor'){
+            if ($role == 'editor'){
                 $isadmin = 0;
             }
         }
 
 
         $users_team_apps = UserApps::where('teams_id', $users_team)->get();
-        $frameworks = Frameworks::all();
 
+        $frameworks = Frameworks::all();
 
         return Inertia::render('Application', [
             'apps' => $users_team_apps,
             'framework' => $frameworks,
-            'isAdmin' => $isadmin
+            'isAdmin' => $isadmin,
+            'notifications' => $notifications
         ]);
 
     }
@@ -87,6 +92,8 @@ class UserAppController extends Controller
         $app->service_subscriber_name = $request->input('service_subscriber_name');
         $app->technical_supervisor_name = $request->input('technical_supervisor_name');
         $app->content_supervisor_name = $request->input('content_supervisor_name');
+
+
 
         //TODO notifications enabled
 //        $app->notify()->users_id = $request->user()->id;
@@ -129,6 +136,8 @@ class UserAppController extends Controller
 
         $users_team_apps = UserApps::where('id', $id)->get();
 
+
+
         //Gets saved comment from database and new comment from request
         $old_comment = $users_team_apps[0]->comments;
         $new_comment = $request->input('comments');
@@ -138,25 +147,40 @@ class UserAppController extends Controller
         array_push($temp_new_comment, preg_split('/\s+/', $new_comment, -1, PREG_SPLIT_NO_EMPTY));
         $temp_old_comment = array();
         array_push($temp_old_comment, preg_split('/\s+/', $old_comment, -1, PREG_SPLIT_NO_EMPTY));
+        var_dump(strlen($old_comment));
+        var_dump(strlen($new_comment));
+        $comment_time = Carbon::now()->format('d-m-Y H:i:s');
+        $username = (string)$request->user()->name;
+        $username = "[" .$comment_time .", ".$username ."]: ";
+        //dd('e');
         if(strlen($old_comment) != strlen($new_comment)){
-            //Removes old comments from array and leaves just the new one
-            for($i = 0; $i<count($temp_old_comment[0]); $i++){
-                unset($temp_new_comment[0][$i]);
+
+            //If deleting comments
+            if(strlen($old_comment) > strlen($new_comment)){
+                if(count($temp_new_comment[0]) == 0){
+                    $comment = "";
+                }else {
+                    $comment = implode(" ",$temp_new_comment[0]);
+                }
+
+            }else{
+                //Removes old comments from array and leaves just the new one
+                for($i = 0; $i<count($temp_old_comment[0]); $i++){
+                    unset($temp_new_comment[0][$i]);
+                }
+
+                //Adds current time and user to array
+                $temp_old_comment[0][] = $username;
+
+                //Adds time, username and new comment to array
+                for($i = 0; $i<count($temp_new_comment[0]); $i++){
+                    $temp_old_comment[0][] = array_values($temp_new_comment[0])[$i];
+                }
+
+                //Makes string from array
+                $comment = implode(" ",$temp_old_comment[0]);
             }
 
-            //Current time and username, adds to array
-            $comment_time = Carbon::now()->format('d-m-Y H:i:s');
-            $username = (string)$request->user()->name;
-            $username = "[" .$comment_time .", ".$username ."]: ";
-            $temp_old_comment[0][] = $username;
-
-            //Adds time, username and new comment to array
-            for($i = 0; $i<count($temp_new_comment[0]); $i++){
-                $temp_old_comment[0][] = array_values($temp_new_comment[0])[$i];
-            }
-
-            //Makes string from array
-            $comment = implode(" ",$temp_old_comment[0]);
         } else {
             $comment = $request->input('comments');
         }
@@ -194,8 +218,32 @@ class UserAppController extends Controller
             'content_supervisor_name' => $request->input('content_supervisor_name')
        ]);
 
+
+
+
         return redirect()->back()
             ->with('message', 'Rakendus edukalt uuendatud.');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function updateNotifications(Request $request, $id)
+    {
+
+        if($request->has('true')){
+            EmailNotifications::updateOrCreate(['users_id' => $request->user()->id,
+                'user_apps_id' => $id], ['notification_enabled' => 1]);
+        } else {
+            EmailNotifications::updateOrCreate(['users_id' => $request->user()->id,
+                'user_apps_id' => $id], ['notification_enabled' => 0]);
+        }
+
+        return redirect()->back();
     }
 
 

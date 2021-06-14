@@ -15,11 +15,31 @@ class FrameworkSeeder extends Seeder
     public function run()
     {
         DB::table('frameworks')->insert([
-            'framework_name' => "Drupal",
+            'framework_name' => "Drupal 9",
             'new_framework_version' => "0"
         ]);
         DB::table('frameworks')->insert([
-            'framework_name' => "Wordpress",
+            'framework_name' => "Drupal 8",
+            'new_framework_version' => "0"
+        ]);
+        DB::table('frameworks')->insert([
+            'framework_name' => "Drupal 7",
+            'new_framework_version' => "0"
+        ]);
+        DB::table('frameworks')->insert([
+            'framework_name' => "Wordpress 3",
+            'new_framework_version' => "0"
+        ]);
+        DB::table('frameworks')->insert([
+            'framework_name' => "Wordpress 4",
+            'new_framework_version' => "0"
+        ]);
+        DB::table('frameworks')->insert([
+            'framework_name' => "Wordpress 5",
+            'new_framework_version' => "0"
+        ]);
+        DB::table('frameworks')->insert([
+            'framework_name' => "H5P",
             'new_framework_version' => "0"
         ]);
     }
