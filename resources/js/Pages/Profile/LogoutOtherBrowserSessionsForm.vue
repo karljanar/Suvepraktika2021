@@ -1,16 +1,16 @@
 <template>
     <jet-action-section>
         <template #title>
-            Browser Sessions
+            Brauseri Seansid
         </template>
 
         <template #description>
-            Manage and log out your active sessions on other browsers and devices.
+            Logige välja kõikidest oma aktiivsetest seanssidest teistes brauserites ja seadmetes.
         </template>
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
+                Vajadusel võite kõigist teistest brauseriseanssidest kõigis seadmetes välja logida. Mõned teie hiljutistest seanssidest on loetletud allpool; see loetelu ei pruugi siiski olla täielik. Kui tunnete, et teie konto on ohustatud, peaksite ka oma parooli värskendama.
             </div>
 
             <!-- Other Browser Sessions -->
@@ -35,8 +35,8 @@
                             <div class="text-xs text-gray-500">
                                 {{ session.ip_address }},
 
-                                <span class="text-green-500 font-semibold" v-if="session.is_current_device">This device</span>
-                                <span v-else>Last active {{ session.last_active }}</span>
+                                <span class="text-green-500 font-semibold" v-if="session.is_current_device">See seade</span>
+                                <span v-else>Viimati aktiivne {{ session.last_active }}</span>
                             </div>
                         </div>
                     </div>
@@ -45,25 +45,25 @@
 
             <div class="flex items-center mt-5">
                 <jet-button @click="confirmLogout">
-                    Log Out Other Browser Sessions
+                    Logige teistest brauseriseanssidest välja
                 </jet-button>
 
                 <jet-action-message :on="form.recentlySuccessful" class="ml-3">
-                    Done.
+                    Tehtud.
                 </jet-action-message>
             </div>
 
             <!-- Log Out Other Devices Confirmation Modal -->
             <jet-dialog-modal :show="confirmingLogout" @close="closeModal">
                 <template #title>
-                    Log Out Other Browser Sessions
+                    Logige teistest brauseriseanssidest välja
                 </template>
 
                 <template #content>
-                    Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.
+                    Sisestage oma parool, et kinnitada, et soovite kõigist oma seadmetest oma teistest brauseriseanssidest välja logida.
 
                     <div class="mt-4">
-                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Password"
+                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Parool"
                                     ref="password"
                                     v-model="form.password"
                                     @keyup.enter="logoutOtherBrowserSessions" />
@@ -74,11 +74,11 @@
 
                 <template #footer>
                     <jet-secondary-button @click="closeModal">
-                        Cancel
+                        Tühista
                     </jet-secondary-button>
 
                     <jet-button class="ml-2" @click="logoutOtherBrowserSessions" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Log Out Other Browser Sessions
+                        Logige teistest brauseriseanssidest välja
                     </jet-button>
                 </template>
             </jet-dialog-modal>

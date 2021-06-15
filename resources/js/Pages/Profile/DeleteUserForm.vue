@@ -1,35 +1,35 @@
 <template>
     <jet-action-section>
         <template #title>
-            Delete Account
+            Kustuta konto
         </template>
 
         <template #description>
-            Permanently delete your account.
+            Jäädavalt kustutada oma konto.
         </template>
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.
+             Kui teie konto on kustutatud, kustutatakse kõik selle ressursid ja andmed jäädavalt. Enne oma konto kustutamist laadige alla kõik andmed või teave, mida soovite säilitada.
             </div>
 
             <div class="mt-5">
                 <jet-danger-button @click="confirmUserDeletion">
-                    Delete Account
+                    Kustuta Kasutaja
                 </jet-danger-button>
             </div>
 
             <!-- Delete Account Confirmation Modal -->
             <jet-dialog-modal :show="confirmingUserDeletion" @close="closeModal">
                 <template #title>
-                    Delete Account
+                    Kustuta Kasutaja
                 </template>
 
                 <template #content>
-                    Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.
+                    Kas olete kindel, et soovite oma konto kustutada? Kui teie konto on kustutatud, kustutatakse kõik selle ressursid ja andmed jäädavalt. Sisestage oma parool, et kinnitada, et soovite oma konto jäädavalt kustutada.
 
                     <div class="mt-4">
-                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Password"
+                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Parool"
                                     ref="password"
                                     v-model="form.password"
                                     @keyup.enter="deleteUser" />
@@ -40,11 +40,11 @@
 
                 <template #footer>
                     <jet-secondary-button @click="closeModal">
-                        Cancel
+                        Tühista
                     </jet-secondary-button>
 
                     <jet-danger-button class="ml-2" @click="deleteUser" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Delete Account
+                        Kustuta Kasutaja
                     </jet-danger-button>
                 </template>
             </jet-dialog-modal>
