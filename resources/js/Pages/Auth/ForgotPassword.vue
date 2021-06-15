@@ -1,8 +1,6 @@
 <template>
     <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
+
 
         <div class="mb-4 text-sm text-gray-600">
             Unustasid oma parooli? Pole probleemi. Lihtsalt andke meile teada oma emaili aadress ja me saadame teile parooli lähtestamise lingi, mis võimaldab teil valida uue.

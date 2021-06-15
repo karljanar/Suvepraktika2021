@@ -1,8 +1,5 @@
 <template>
     <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
 
         <div class="mb-4 text-sm text-gray-600">
             Tänud registreerumast! Enne alustamist, võiks kontrollida oma emaili aadress klõpsates lingil me lihtsalt saadetakse teile? Kui te ei saanud e-kirja, saadame teile hea meelega teise.

@@ -1,8 +1,5 @@
 <template>
     <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
 
         <div class="mb-4 text-sm text-gray-600">
             See on rakenduse turvaline ala. Palun kinnitage oma parool enne jätkamist.
