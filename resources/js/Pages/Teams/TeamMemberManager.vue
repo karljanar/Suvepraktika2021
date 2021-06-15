@@ -6,17 +6,17 @@
             <!-- Add Team Member -->
             <jet-form-section @submitted="addTeamMember">
                 <template #title>
-                    Add Team Member
+                    Lisa meeskonda uus liige.
                 </template>
 
                 <template #description>
-                    Add a new team member to your team, allowing them to collaborate with you.
+                    Kutsu inimesi oma meeskonda.
                 </template>
 
                 <template #form>
                     <div class="col-span-6">
                         <div class="max-w-xl text-sm text-gray-600">
-                            Please provide the email address of the person you would like to add to this team.
+                            Palun sisestage uue liikme emaili aadress.
                         </div>
                     </div>
 
@@ -29,7 +29,7 @@
 
                     <!-- Role -->
                     <div class="col-span-6 lg:col-span-4" v-if="availableRoles.length > 0">
-                        <jet-label for="roles" value="Role" />
+                        <jet-label for="roles" value="Roll" />
                         <jet-input-error :message="addTeamMemberForm.errors.role" class="mt-2" />
 
                         <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
@@ -60,11 +60,11 @@
 
                 <template #actions>
                     <jet-action-message :on="addTeamMemberForm.recentlySuccessful" class="mr-3">
-                        Added.
+                        Lisatud.
                     </jet-action-message>
 
                     <jet-button :class="{ 'opacity-25': addTeamMemberForm.processing }" :disabled="addTeamMemberForm.processing">
-                        Add
+                        Lisa
                     </jet-button>
                 </template>
             </jet-form-section>
@@ -76,11 +76,11 @@
             <!-- Team Member Invitations -->
             <jet-action-section class="mt-10 sm:mt-0">
                 <template #title>
-                    Pending Team Invitations
+                    Ootel meeskonna kutsed
                 </template>
 
                 <template #description>
-                    These people have been invited to your team and have been sent an invitation email. They may join the team by accepting the email invitation.
+                    Need inimesed on kutsutud teie meeskonda ning emaile on neile saadetud. Nad saavad ühineda teie meeskonnaga aksepteerides emaili kutse.
                 </template>
 
                 <!-- Pending Team Member Invitation List -->
@@ -94,7 +94,7 @@
                                 <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
                                                     @click="cancelTeamInvitation(invitation)"
                                                     v-if="userPermissions.canRemoveTeamMembers">
-                                    Cancel
+                                    Tühista
                                 </button>
                             </div>
                         </div>
@@ -109,11 +109,11 @@
             <!-- Manage Team Members -->
             <jet-action-section class="mt-10 sm:mt-0">
                 <template #title>
-                    Team Members
+                    Meeskonna liikmed
                 </template>
 
                 <template #description>
-                    All of the people that are part of this team.
+                    Kõik teie meeskonnas olevad inimesed.
                 </template>
 
                 <!-- Team Member List -->
@@ -141,14 +141,14 @@
                                 <button class="cursor-pointer ml-6 text-sm text-red-500"
                                                     @click="confirmLeavingTeam"
                                                     v-if="$page.props.user.id === user.id">
-                                    Leave
+                                    Lahku
                                 </button>
 
                                 <!-- Remove Team Member -->
                                 <button class="cursor-pointer ml-6 text-sm text-red-500"
                                                     @click="confirmTeamMemberRemoval(user)"
                                                     v-if="userPermissions.canRemoveTeamMembers">
-                                    Remove
+                                    Eemalda
                                 </button>
                             </div>
                         </div>
@@ -160,7 +160,7 @@
         <!-- Role Management Modal -->
         <jet-dialog-modal :show="currentlyManagingRole" @close="currentlyManagingRole = false">
             <template #title>
-                Manage Role
+                Halda rolle
             </template>
 
             <template #content>
@@ -193,11 +193,11 @@
 
             <template #footer>
                 <jet-secondary-button @click="currentlyManagingRole = false">
-                    Cancel
+                    Tühista
                 </jet-secondary-button>
 
                 <jet-button class="ml-2" @click="updateRole" :class="{ 'opacity-25': updateRoleForm.processing }" :disabled="updateRoleForm.processing">
-                    Save
+                    Salvesta
                 </jet-button>
             </template>
         </jet-dialog-modal>
@@ -205,20 +205,20 @@
         <!-- Leave Team Confirmation Modal -->
         <jet-confirmation-modal :show="confirmingLeavingTeam" @close="confirmingLeavingTeam = false">
             <template #title>
-                Leave Team
+                Lahku meeskonnast
             </template>
 
             <template #content>
-                Are you sure you would like to leave this team?
+                Kas te olete kindel, et soovite meeskonnast lahkuda?
             </template>
 
             <template #footer>
                 <jet-secondary-button @click="confirmingLeavingTeam = false">
-                    Cancel
+                    Tühista
                 </jet-secondary-button>
 
                 <jet-danger-button class="ml-2" @click="leaveTeam" :class="{ 'opacity-25': leaveTeamForm.processing }" :disabled="leaveTeamForm.processing">
-                    Leave
+                    Lahku
                 </jet-danger-button>
             </template>
         </jet-confirmation-modal>
@@ -226,20 +226,20 @@
         <!-- Remove Team Member Confirmation Modal -->
         <jet-confirmation-modal :show="teamMemberBeingRemoved" @close="teamMemberBeingRemoved = null">
             <template #title>
-                Remove Team Member
+                Eemalda meeskonna liige
             </template>
 
             <template #content>
-                Are you sure you would like to remove this person from the team?
+               Kas olete kindel, et soovite liikme meeskonnast eemaldada?
             </template>
 
             <template #footer>
                 <jet-secondary-button @click="teamMemberBeingRemoved = null">
-                    Cancel
+                    Tühista
                 </jet-secondary-button>
 
                 <jet-danger-button class="ml-2" @click="removeTeamMember" :class="{ 'opacity-25': removeTeamMemberForm.processing }" :disabled="removeTeamMemberForm.processing">
-                    Remove
+                    Eemalda
                 </jet-danger-button>
             </template>
         </jet-confirmation-modal>

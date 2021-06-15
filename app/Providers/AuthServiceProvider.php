@@ -28,15 +28,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        VerifyEmail::toMailUsing(function (User $user, string $verificationUrl) {
-            return (new MailMessage)
-                ->subject(Lang::get('Kinnita eposti aadress'))
-                ->line(Lang::get('Palun vajuta Kinnita nuppu, et kinnitada oma eposti aadress.'))
-                ->action(Lang::get('Kinnita eposti aadress'), $verificationUrl)
-                ->line(Lang::get('Kui te kontot ei loonud, pole edasine tegevus vajalik.'));
-        });
-        $this->registerPolicies();
-
-        //
+//
     }
 }
