@@ -8,8 +8,6 @@ use App\Models\Frameworks;
 use App\Models\UserAppsArchive;
 use Illuminate\Http\Request;
 use App\Models\UserApps;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -18,44 +16,35 @@ class UserAppController extends Controller
 {
 
     /**
- * Show the form for creating a new resource.
- *
-
+     * Show the form for creating a new resource.
+     *
      * @return \Inertia\Response
      */
 
     public function index(Request $request)
 
     {
-
-
         $users_team = $request->user()->currentTeam->id;
 
         $notifications = EmailNotifications::where('users_id', $request->user()->id)->get();
-        //var_dump($notifications);
 
         //If user has role in current team, default = admin, if editor then deleting app is not allowed.
         $role = $request->user()->teamRole($request->user()->currentTeam)->key;
         $isadmin = 1;
-        if($role){
-            if ($role == 'editor'){
+        if ($role) {
+            if ($role == 'editor') {
                 $isadmin = 0;
             }
         }
 
-
         $users_team_apps = UserApps::where('teams_id', $users_team)->get();
 
-
-        if(count($notifications) != count($users_team_apps)){
-            foreach ($users_team_apps as $app){
+        if (count($notifications) != count($users_team_apps)) {
+            foreach ($users_team_apps as $app) {
                 EmailNotifications::firstOrCreate(['users_id' => $request->user()->id,
                     'user_apps_id' => $app->id], ['notification_enabled' => 0]);
             }
         }
-
-
-
 
         $frameworks = Frameworks::all();
 
@@ -69,11 +58,9 @@ class UserAppController extends Controller
     }
 
 
-
     /**
- * Show the form for creating a new resource.
- *
-
+     * Show the form for creating a new resource.
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
 
@@ -114,9 +101,8 @@ class UserAppController extends Controller
 
 
     /**
- * Show the form for creating a new resource.
- *
-
+     * Show the form for creating a new resource.
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     //"Mu nimi on Mari Maasikas ja võin vabalt segast peksta"
@@ -137,7 +123,6 @@ class UserAppController extends Controller
         $users_team_apps = UserApps::where('id', $id)->get();
 
 
-
         //Gets saved comment from database and new comment from request
         $old_comment = $users_team_apps[0]->comments;
         $new_comment = $request->input('comments');
@@ -151,21 +136,21 @@ class UserAppController extends Controller
         var_dump(strlen($new_comment));
         $comment_time = Carbon::now()->format('d-m-Y H:i:s');
         $username = (string)$request->user()->name;
-        $username = "[" .$comment_time .", ".$username ."]: ";
+        $username = "[" . $comment_time . ", " . $username . "]: ";
         //dd('e');
-        if(strlen($old_comment) != strlen($new_comment)){
+        if (strlen($old_comment) != strlen($new_comment)) {
 
             //If deleting comments
-            if(strlen($old_comment) > strlen($new_comment)){
-                if(count($temp_new_comment[0]) == 0){
+            if (strlen($old_comment) > strlen($new_comment)) {
+                if (count($temp_new_comment[0]) == 0) {
                     $comment = "";
-                }else {
-                    $comment = implode(" ",$temp_new_comment[0]);
+                } else {
+                    $comment = implode(" ", $temp_new_comment[0]);
                 }
 
-            }else{
+            } else {
                 //Removes old comments from array and leaves just the new one
-                for($i = 0; $i<count($temp_old_comment[0]); $i++){
+                for ($i = 0; $i < count($temp_old_comment[0]); $i++) {
                     unset($temp_new_comment[0][$i]);
                 }
 
@@ -173,12 +158,12 @@ class UserAppController extends Controller
                 $temp_old_comment[0][] = $username;
 
                 //Adds time, username and new comment to array
-                for($i = 0; $i<count($temp_new_comment[0]); $i++){
+                for ($i = 0; $i < count($temp_new_comment[0]); $i++) {
                     $temp_old_comment[0][] = array_values($temp_new_comment[0])[$i];
                 }
 
                 //Makes string from array
-                $comment = implode(" ",$temp_old_comment[0]);
+                $comment = implode(" ", $temp_old_comment[0]);
             }
 
         } else {
@@ -216,9 +201,7 @@ class UserAppController extends Controller
             'service_subscriber_name' => $request->input('service_subscriber_name'),
             'technical_supervisor_name' => $request->input('technical_supervisor_name'),
             'content_supervisor_name' => $request->input('content_supervisor_name')
-       ]);
-
-
+        ]);
 
 
         return redirect()->back()
@@ -228,14 +211,13 @@ class UserAppController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-
      * @return \Illuminate\Http\RedirectResponse
      */
 
     public function updateNotifications(Request $request, $id)
     {
 
-        if($request->has('true')){
+        if ($request->has('true')) {
 
             EmailNotifications::updateOrCreate(['users_id' => $request->user()->id,
                 'user_apps_id' => $id], ['notification_enabled' => 1]);
@@ -250,11 +232,9 @@ class UserAppController extends Controller
     }
 
 
-
     /**
- * Show the form for creating a new resource.
- *
-
+     * Show the form for creating a new resource.
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
 

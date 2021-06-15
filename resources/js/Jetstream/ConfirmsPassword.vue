@@ -13,7 +13,7 @@
                 {{ content }}
 
                 <div class="mt-4">
-                    <jet-input type="password" class="mt-1 block w-3/4" placeholder="Password"
+                    <jet-input type="password" class="mt-1 block w-3/4" placeholder="Parool"
                                 ref="password"
                                 v-model="form.password"
                                 @keyup.enter="confirmPassword" />
@@ -47,13 +47,13 @@
 
         props: {
             title: {
-                default: 'Confirm Password',
+                default: 'Kinnita Parool',
             },
             content: {
-                default: 'For your security, please confirm your password to continue.',
+                default: 'Teie turvalisuse tagamiseks kinnitage oma parool jätkamiseks.',
             },
             button: {
-                default: 'Confirm',
+                default: 'Kinnita',
             }
         },
 

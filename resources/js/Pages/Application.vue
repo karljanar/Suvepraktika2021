@@ -23,7 +23,7 @@
 
                         </div>
                         <button @click="openModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa rakendus</button>
-
+                        <button v-if="isAdmin === 1" @click="openFrameworkModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa Raamistik</button>
 
 
                         <table class="table-fixed w-full">
@@ -53,18 +53,8 @@
                                 <td v-if="row.update_available === 1" class="bg-red-600 px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
                                 <td v-else class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_loc_in_server }}</td>
-                                <td class="px-2 py-2 w-1/4 border-2 border-gray-200">
-
-                                    <button @click="() => TogglePopup('buttonTrigger')">Kommentaar</button>
-                                    <Popup
-                                        v-if="popupTriggers.buttonTrigger"
-                                        :TogglePopup="() => TogglePopup('buttonTrigger')">
-                                        <ModalComment />
-                                        {{ row.comments }}
-                                    </Popup>
-
-                                    {{row.comments}}
-
+                                <td @click="commentsModal(row)" class="bg-gray-200 cursor-pointer px-2 py-2 w-1/4 border-4 border-blue-400">
+                                    Kommentaarid
                                 </td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.service_subscriber_name }}</td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.technical_supervisor_name }}</td>
@@ -96,6 +86,114 @@
                             </tr>
                             </tbody>
                         </table>
+
+
+                        <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isCommentsModal">
+
+                            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+
+
+                                <div class="fixed inset-0 transition-opacity">
+
+                                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+
+                                </div>
+
+                                <!-- This element is to trick the browser into centering the modal contents. -->
+
+                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>​
+
+                                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+
+
+
+                                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                            <form>
+                                            <div class="">
+
+                                                <div class="mb-4">
+
+                                                    <p>{{form.comments}}</p>
+
+                                                </div>
+                                                <button @click="closeCommentsModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                                    Sule
+                                                </button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isFrameworkModal">
+                            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                <div class="fixed inset-0 transition-opacity">
+                                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                </div>
+                                <!-- This element is to trick the browser into centering the modal contents. -->
+                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>​
+                                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+
+                                    <form>
+
+                                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+
+                                            <div class="">
+
+                                                <div class="mb-4">
+
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                           name="app_url"
+                                                           placeholder="Raamistiku nimetus"
+                                                           v-model="form.framework_name">
+
+                                                    <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
+
+                                                </div>
+
+                                                <div class="mb-4">
+
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                           name="app_url"
+                                                           placeholder="Raamistiku versioon"
+                                                           v-model="form.new_framework_version">
+
+                                                    <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+
+                                        <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+
+<!--                                            <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="save(form)">-->
+
+<!--                                            Salvesta-->
+
+<!--                                            </button>-->
+
+                                        </span>
+                                        <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                                            <button @click="closedFrameworkModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                                Tühista
+                                            </button>
+
+                                        </span>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isOpen">
 
                             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -225,17 +323,8 @@
 
                                                     <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
                                                 </div>
-
-
-
-
-
-
-
                                             </div>
-
                                         </div>
-
                                         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
 
                             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
@@ -300,54 +389,41 @@ import Welcome from './../Jetstream/Welcome'
 
 import { ref } from 'vue';
 
-import Popup from './../components/Popup'
-
-import ModalComment from './../components/ModalComment'
+import Modal from "@/Jetstream/Modal";
 
 export default {
 
     components: {
+        Modal,
 
         AppLayout,
 
         Welcome,
-
-        Popup,
-
-        ModalComment
 
     },
 
     props: ['apps', 'framework', 'errors', 'isAdmin', 'notifications'],
 
     setup () {
-        const popupTriggers = ref({
-            buttonTrigger: false,
-            timedTrigger: false
-        });
-        const TogglePopup = (trigger) => {
-            popupTriggers.value[trigger] = !popupTriggers.value[trigger]
-        }
-        setTimeout(() => {
-            popupTriggers.value.timedTrigger = true;
-        }, 3000);
-        return {
-            Popup,
-            popupTriggers,
-            TogglePopup
-        }
+       // /
     },
 
 
     data() {
 
+
         return {
+
+            isFrameworkModal: false,
+
+            isCommentsModal: false,
 
             editMode: false,
 
             isOpen: false,
 
             form: {
+                title: null,
 
                 framework_id: null,
 
@@ -369,7 +445,9 @@ export default {
 
                 content_supervisor_name: null,
 
+                framework_name: null,
 
+                new_framework_version: null
             }
 
         }
@@ -378,9 +456,35 @@ export default {
 
     methods: {
 
+        openFrameworkModal: function(){
+            this.isFrameworkModal = true;
+        },
+
+        closedFrameworkModal: function () {
+
+            this.isFrameworkModal = false;
+
+        },
+
+        commentsModal: function(data){
+            this.form = Object.assign({}, data);
+
+            this.openCommentsModal();
+        },
+
+        openCommentsModal: function(){
+            this.isCommentsModal = true;
+        },
+
         openModal: function () {
 
             this.isOpen = true;
+
+        },
+
+        closeCommentsModal: function () {
+
+            this.isCommentsModal = false;
 
         },
 
@@ -397,6 +501,9 @@ export default {
         reset: function () {
 
             this.form = {
+                title: null,
+
+                body: null,
 
                 framework_id: null,
 
@@ -418,6 +525,9 @@ export default {
 
                 content_supervisor_name: null,
 
+                framework_name: null,
+
+                new_framework_version: null
 
             }
 
@@ -483,3 +593,4 @@ export default {
 }
 
 </script>
+
