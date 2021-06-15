@@ -33,6 +33,7 @@ class UserAppController extends Controller
 
         $notifications = EmailNotifications::where('users_id', $request->user()->id)->get();
         //var_dump($notifications);
+
         //If user has role in current team, default = admin, if editor then deleting app is not allowed.
         $role = $request->user()->teamRole($request->user()->currentTeam)->key;
         $isadmin = 1;
@@ -44,6 +45,17 @@ class UserAppController extends Controller
 
 
         $users_team_apps = UserApps::where('teams_id', $users_team)->get();
+
+
+        if(count($notifications) != count($users_team_apps)){
+            foreach ($users_team_apps as $app){
+                EmailNotifications::firstOrCreate(['users_id' => $request->user()->id,
+                    'user_apps_id' => $app->id], ['notification_enabled' => 0]);
+            }
+        }
+
+
+
 
         $frameworks = Frameworks::all();
 
@@ -92,19 +104,7 @@ class UserAppController extends Controller
         $app->service_subscriber_name = $request->input('service_subscriber_name');
         $app->technical_supervisor_name = $request->input('technical_supervisor_name');
         $app->content_supervisor_name = $request->input('content_supervisor_name');
-
-
-
-        //TODO notifications enabled
-//        $app->notify()->users_id = $request->user()->id;
-//
-//
-       $app->save();
-//
-//        $notif = new EmailNotifications();
-//        $notif->users_id = $request->user()->id;
-//        $notif->applications_id =
-
+        $app->save();
 
 
         return redirect()->back()
@@ -236,12 +236,15 @@ class UserAppController extends Controller
     {
 
         if($request->has('true')){
+
             EmailNotifications::updateOrCreate(['users_id' => $request->user()->id,
                 'user_apps_id' => $id], ['notification_enabled' => 1]);
         } else {
+
             EmailNotifications::updateOrCreate(['users_id' => $request->user()->id,
                 'user_apps_id' => $id], ['notification_enabled' => 0]);
         }
+
 
         return redirect()->back();
     }
