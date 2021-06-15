@@ -1,6 +1,13 @@
 <template>
     <jet-authentication-card>
-
+        <template #logo>
+            <inertia-link :href="route('login')" class="text-sm text-2xl text-gray-600 hover:text-gray-900">
+                Logi Sisse
+            </inertia-link>
+            <inertia-link :href="route('register')" class="text-sm text-2xl text-gray-600 hover:text-gray-900">
+                Registreeru
+            </inertia-link>
+        </template>
 
         <div class="mb-4 text-sm text-gray-600">
             Unustasid oma parooli? Pole probleemi. Lihtsalt andke meile teada oma emaili aadress ja me saadame teile parooli lähtestamise lingi, mis võimaldab teil valida uue.

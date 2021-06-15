@@ -1,6 +1,3 @@
 <template>
-    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M11.395 44.428C4.557 40.198 0 32.632 0 24 0 10.745 10.745 0 24 0a23.891 23.891 0 0113.997 4.502c-.2 17.907-11.097 33.245-26.602 39.926z" fill="#6875F5"/>
-      <path d="M14.134 45.885A23.914 23.914 0 0024 48c13.255 0 24-10.745 24-24 0-3.516-.756-6.856-2.115-9.866-4.659 15.143-16.608 27.092-31.75 31.751z" fill="#6875F5"/>
-    </svg>
+    <!--?xml version="1.0" standalone="no"?-->              <svg id="sw-js-blob-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">                    <defs>                         <linearGradient id="sw-gradient" x1="0" x2="1" y1="1" y2="0">                            <stop id="stop1" stop-color="rgba(248, 117, 55, 1)" offset="0%"></stop>                            <stop id="stop2" stop-color="rgba(251, 168, 31, 1)" offset="100%"></stop>                        </linearGradient>                    </defs>                <path fill="url(#sw-gradient)" d="M13.1,-13.2C16.6,-12.8,18.6,-8.2,20,-3.1C21.3,1.9,22,7.5,19.1,9.6C16.2,11.7,9.7,10.2,3.2,15.5C-3.3,20.7,-9.8,32.7,-13.9,33.3C-18,33.9,-19.7,23.1,-23.2,14.6C-26.7,6,-31.9,-0.3,-29.9,-4.2C-27.9,-8.1,-18.6,-9.6,-12.4,-9.5C-6.2,-9.5,-3.1,-7.9,0.9,-8.9C4.8,-10,9.7,-13.6,13.1,-13.2Z" width="100%" height="100%" transform="translate(50 50)" style="transition: all 0.3s ease 0s;" stroke-width="0" stroke="url(#sw-gradient)"></path>              </svg>
 </template>

@@ -1,5 +1,13 @@
 <template>
     <jet-authentication-card>
+        <template #logo>
+            <inertia-link :href="route('login')" class="text-sm text-2xl text-gray-600 hover:text-gray-900">
+                Logi Sisse
+            </inertia-link>
+            <inertia-link :href="route('register')" class="text-sm text-2xl text-gray-600 hover:text-gray-900">
+                Registreeru
+            </inertia-link>
+        </template>
 
         <div class="mb-4 text-sm text-gray-600">
             Tänud registreerumast! Enne alustamist, võiks kontrollida oma emaili aadress klõpsates lingil me lihtsalt saadetakse teile? Kui te ei saanud e-kirja, saadame teile hea meelega teise.
