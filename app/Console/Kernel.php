@@ -127,7 +127,7 @@ class Kernel extends ConsoleKernel
             $result = $process->getOutput();
             $result_array = array();
             array_push($result_array, preg_split('/\s+/', $result, -1, PREG_SPLIT_NO_EMPTY));
-            $frameworks = Frameworks::all();
+            $frameworks = Frameworks::where('automatic_version_control', 1)->get();
 
             //Checks current version in database against new scraped version
             foreach ($frameworks as $framework){
@@ -135,7 +135,7 @@ class Kernel extends ConsoleKernel
                     DB::update('update frameworks set new_framework_version = ?, updated_at = ? where id = ?', [$result_array[0][($framework->id) - 1] , now(),$framework->id]);
                 }
             }
-        })->everyTenMinutes();
+        })->everyMinute();
 
 
 

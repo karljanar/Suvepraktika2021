@@ -16,7 +16,7 @@ class CreateFrameworksTable extends Migration
         Schema::create('frameworks', function (Blueprint $table) {
             $table->id('id');
             $table->string('framework_name');
-            //TODO delete current uer app ver scraper
+            $table->tinyInteger('automatic_version_control');
             $table->string('current_user_app_ver_scraper')->nullable();
             $table->string('new_framework_version');
             $table->timestamps();

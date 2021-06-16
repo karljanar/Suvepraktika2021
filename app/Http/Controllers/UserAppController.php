@@ -98,6 +98,34 @@ class UserAppController extends Controller
             ->with('message', 'Rakendus on lisatud.');
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function storeFramework(Request $request)
+
+    {
+
+        //Fields that are required
+        Validator::make($request->all(), [
+            'framework_name' => ['required'],
+            'new_framework_version' => ['required']
+        ])->validate();
+
+        //Gets all fields from request and saves it to database
+        $framework = new Frameworks();
+        $framework->framework_name = $request->input('framework_name');
+        $framework->automatic_version_control = 0;
+        $framework->new_framework_version = $request->input('new_framework_version');
+        $framework->save();
+
+
+        return redirect()->back()
+            ->with('message', 'Raamistik on lisatud.');
+    }
+
 
 
     /**

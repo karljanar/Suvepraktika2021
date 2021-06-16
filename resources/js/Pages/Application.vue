@@ -66,8 +66,9 @@
                                     <button v-if="isAdmin === 1" @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Kustuta</button>
 
                                 </td>
-
+                                <label>Emaili teavitused</label>
                                 <template v-for="email in notifications">
+
                                     <input v-if="email.notification_enabled === 1 && email.user_apps_id === row.id"
                                            checked
                                            type="checkbox"
@@ -96,7 +97,7 @@
 
                                 <div class="fixed inset-0 transition-opacity">
 
-                                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                    <div @click="closeCommentsModal" class="absolute inset-0 bg-gray-500 opacity-75"></div>
 
                                 </div>
 
@@ -132,7 +133,7 @@
                         <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isFrameworkModal">
                             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                                 <div class="fixed inset-0 transition-opacity">
-                                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                    <div @click="closedFrameworkModal()" class="absolute inset-0 bg-gray-500 opacity-75"></div>
                                 </div>
                                 <!-- This element is to trick the browser into centering the modal contents. -->
                                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>​
@@ -145,7 +146,7 @@
                                             <div class="">
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistiku Nimetus</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_url"
                                                            placeholder="Raamistiku nimetus"
@@ -156,7 +157,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistiku versioon</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_url"
                                                            placeholder="Raamistiku versioon"
@@ -174,11 +175,11 @@
 
                                         <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
 
-<!--                                            <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="save(form)">-->
+                                            <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="saveFramework(form)">
 
-<!--                                            Salvesta-->
+                                            Salvesta
 
-<!--                                            </button>-->
+                                            </button>
 
                                         </span>
                                         <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -202,7 +203,7 @@
 
                                 <div class="fixed inset-0 transition-opacity">
 
-                                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                    <div @click="closeModal()" class="absolute inset-0 bg-gray-500 opacity-75"></div>
 
                                 </div>
 
@@ -219,7 +220,7 @@
                                             <div class="">
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Nimetus</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_url"
                                                            placeholder="Rakenduse nimetus"
@@ -230,7 +231,7 @@
                                                 </div>
 
                                                 <div class="mb-4" >
-                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500"> Raamistik</label>
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistik</label>
                                                     <select name="framework_id" id="framework_id"
                                                             class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                             v-model="form.framework_id">
@@ -244,7 +245,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse URL</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_url"
                                                            placeholder="Rakenduse URL..."
@@ -255,7 +256,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse Reaalne URL</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="real_app_url"
                                                            placeholder="Rakenduse tegelik URL..."
@@ -265,7 +266,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Praegune Versioon</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="current_version"
                                                            placeholder="Praegune versioon..."
@@ -275,7 +276,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse Asukoht Serveris</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_loc_in_server"
                                                            placeholder="Rakenduse asukoht serveris..."
@@ -286,7 +287,7 @@
 
                                                 <div class="mb-4">
 
-                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500"> Kommentaarid</label>
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Kommentaarid</label>
                                                     <textarea class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                               name="comments" placeholder="Kommentaarid..."
                                                               v-model="form.comments"> </textarea>
@@ -295,7 +296,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse Tellija</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="service_subscriber_name"
                                                            placeholder="Rakenduse tellija nimi..."
@@ -305,7 +306,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Tehniline Vastutaja</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="technical_supervisor_name"
                                                            placeholder="Rakenduse tehniline vastutaja..."
@@ -315,7 +316,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Sisu Vastutaja</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="content_supervisor_name"
                                                            placeholder="Rakenduse sisu vastutaja..."
@@ -390,10 +391,12 @@ import Welcome from './../Jetstream/Welcome'
 import { ref } from 'vue';
 
 import Modal from "@/Jetstream/Modal";
+import Label from "@/Jetstream/Label";
 
 export default {
 
     components: {
+        Label,
         Modal,
 
         AppLayout,
@@ -546,6 +549,16 @@ export default {
 
         },
 
+        saveFramework: function (data) {
+
+            this.$inertia.post('/apps/framework', data)
+
+            this.reset();
+
+            this.closedFrameworkModal();
+
+        },
+
         edit: function (data) {
 
             this.form = Object.assign({}, data);
@@ -570,8 +583,11 @@ export default {
 
 
         editNotification: function (event, data) {
+
             data._method = 'PATCH';
-            this.$inertia.patch('/apps/editNotification/' + data.id, this.notifications_enabled)
+
+            this.$inertia.patch('/apps/editNotification/' + data.id, this.notifications_enabled);
+
 
         },
 
