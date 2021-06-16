@@ -72,7 +72,8 @@ class UserAppController extends Controller
         Validator::make($request->all(), [
             'framework_id' => ['required'],
             'user_app_name' => ['required'],
-            'app_loc_in_server' => ['required']
+            'app_loc_in_server' => ['required'],
+            'current_version' => ['required']
 
         ])->validate();
 
@@ -132,19 +133,23 @@ class UserAppController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     //"Mu nimi on Mari Maasikas ja võin vabalt segast peksta"
-    public function update(Request $request, $id)
+    public function update(Request $request, $status)
     {
+
+
         //Fields that are required
         Validator::make($request->all(), [
 
             'framework_id' => ['required'],
             'user_app_name' => ['required'],
-            'app_loc_in_server' => ['required']
+            'app_loc_in_server' => ['required'],
+            'current_version' => ['required']
 
         ])->validate();
 
 
-        $users_team_apps = UserApps::where('id', $id)->get();
+
+        $users_team_apps = UserApps::where('id', $request->id)->get();
 
 
         //Gets saved comment from database and new comment from request
@@ -198,8 +203,8 @@ class UserAppController extends Controller
         //Saves old values to archive
         $archive = new UserAppsArchive();
         $archive->user_id = $request->user()->id;
-        $archive->user_app_name = $users_team_apps[0]->user_app_name;
-        $archive->application_id = $id;
+        $archive->arc_user_app_name = $users_team_apps[0]->user_app_name;
+        $archive->arc_user_app_id = $request->id;
         $archive->arc_real_app_url = $users_team_apps[0]->real_app_url;
         $archive->arc_app_url = $users_team_apps[0]->app_url;
         $archive->arc_current_version = $users_team_apps[0]->current_version;
@@ -212,7 +217,7 @@ class UserAppController extends Controller
         $archive->save();
 
         //Updates users app
-        UserApps::where('id', $id)->update([
+        UserApps::where('id', $request->id)->update([
 
             'teams_id' => $request->user()->currentTeam->id,
             'framework_id' => $request->input('framework_id'),
@@ -227,9 +232,13 @@ class UserAppController extends Controller
             'content_supervisor_name' => $request->input('content_supervisor_name')
         ]);
 
+        EmailNotifications::updateOrCreate(['users_id' => $request->user()->id,
+            'user_apps_id' => $request->id], ['notification_enabled' => $status]);
 
         return redirect()->back()
             ->with('message', 'Rakendus edukalt uuendatud.');
+
+
     }
 
     /**
@@ -238,21 +247,10 @@ class UserAppController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
 
-    public function updateNotifications(Request $request, $id)
+    public function updateNotifications(Request $request)
     {
 
-        if ($request->has('true')) {
 
-            EmailNotifications::updateOrCreate(['users_id' => $request->user()->id,
-                'user_apps_id' => $id], ['notification_enabled' => 1]);
-        } else {
-
-            EmailNotifications::updateOrCreate(['users_id' => $request->user()->id,
-                'user_apps_id' => $id], ['notification_enabled' => 0]);
-        }
-
-
-        return redirect()->back();
     }
 
 

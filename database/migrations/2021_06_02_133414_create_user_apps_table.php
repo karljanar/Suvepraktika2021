@@ -20,7 +20,7 @@ class CreateUserAppsTable extends Migration
             $table->string('user_app_name');
             $table->string('real_app_url')->nullable();
             $table->string('app_url')->nullable();
-            $table->string('current_version')->nullable();
+            $table->string('current_version');
             $table->string('app_loc_in_server');
             $table->longText('comments')->nullable();
             $table->string('service_subscriber_name')->nullable();

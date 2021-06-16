@@ -22,6 +22,6 @@ class UserApps extends Model
     }
 
     public function notify(){
-        return $this->hasMany(EmailNotifications::class);
+        return $this->belongsToMany(EmailNotifications::class);
     }
 }
