@@ -21,11 +21,7 @@ class Kernel extends ConsoleKernel
         //
     ];
 
-    /**if($role){
-            if ($role == 'editor'){
-                $isadmin = 0;
-            }
-        }
+    /*
      * Define the application's command schedule.
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
@@ -33,6 +29,30 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+
+        //Checks for new version
+        $schedule->call(function () {
+            //Runs python web scraper
+            $process = new Process(["python3", "public/python/new_version_scraper.py"]);
+            $process->run();
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+
+            $result = $process->getOutput();
+            $result_array = array();
+            array_push($result_array, preg_split('/\s+/', $result, -1, PREG_SPLIT_NO_EMPTY));
+            $frameworks = Frameworks::where('automatic_version_control', 1)->get();
+
+            //Checks current version in database against new scraped version
+            foreach ($frameworks as $framework){
+                if($framework->new_framework_version != $result_array[0][($framework->id) - 1]){
+                    DB::update('update frameworks set new_framework_version = ?, updated_at = ? where id = ?', [$result_array[0][($framework->id) - 1] , now(),$framework->id]);
+                }
+            }
+        })->everyMinute();
+
+
         $schedule->call(function () {
 
             $current_user_app_version = DB::select('select
@@ -114,28 +134,7 @@ class Kernel extends ConsoleKernel
         })->everyMinute();
 
 
-        //Checks for new version
-        $schedule->call(function () {
-            //Runs python web scraper
-            $process = new Process(["python3", "public/python/new_version_scraper.py"]);
-            $process->run();
-            if (!$process->isSuccessful()) {
-                var_dump("error");
-                throw new ProcessFailedException($process);
-            }
 
-            $result = $process->getOutput();
-            $result_array = array();
-            array_push($result_array, preg_split('/\s+/', $result, -1, PREG_SPLIT_NO_EMPTY));
-            $frameworks = Frameworks::where('automatic_version_control', 1)->get();
-
-            //Checks current version in database against new scraped version
-            foreach ($frameworks as $framework){
-                if($framework->new_framework_version != $result_array[0][($framework->id) - 1]){
-                    DB::update('update frameworks set new_framework_version = ?, updated_at = ? where id = ?', [$result_array[0][($framework->id) - 1] , now(),$framework->id]);
-                }
-            }
-        })->everyMinute();
 
 
 

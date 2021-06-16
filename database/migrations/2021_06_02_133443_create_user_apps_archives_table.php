@@ -18,8 +18,8 @@ class CreateUserAppsArchivesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('user_app_name');
             $table->unsignedBigInteger('application_id');
-            $table->string('arc_real_app_url');
-            $table->string('arc_app_url');
+            $table->string('arc_real_app_url')->nullable();
+            $table->string('arc_app_url')->nullable();
             $table->string('arc_current_version')->nullable();
             $table->string('arc_app_loc_in_server');
             $table->longText('arc_comments')->nullable();

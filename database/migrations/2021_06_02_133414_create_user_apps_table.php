@@ -18,8 +18,8 @@ class CreateUserAppsTable extends Migration
             $table->unsignedBigInteger('teams_id');
             $table->unsignedBigInteger('framework_id');
             $table->string('user_app_name');
-            $table->string('real_app_url');
-            $table->string('app_url');
+            $table->string('real_app_url')->nullable();
+            $table->string('app_url')->nullable();
             $table->string('current_version')->nullable();
             $table->string('app_loc_in_server');
             $table->longText('comments')->nullable();
@@ -27,7 +27,6 @@ class CreateUserAppsTable extends Migration
             $table->string('technical_supervisor_name')->nullable();
             $table->string('content_supervisor_name')->nullable();
             $table->boolean('update_available')->nullable();
-            $table->boolean('application_status')->nullable();
             $table->timestamps();
             $table->foreign('framework_id')
                 ->references('id')

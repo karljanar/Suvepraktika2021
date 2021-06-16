@@ -70,8 +70,6 @@ class UserAppController extends Controller
 
         //Fields that are required
         Validator::make($request->all(), [
-            'app_url' => ['required'],
-            'real_app_url' => ['required'],
             'framework_id' => ['required'],
             'user_app_name' => ['required'],
             'app_loc_in_server' => ['required']
@@ -139,8 +137,6 @@ class UserAppController extends Controller
         //Fields that are required
         Validator::make($request->all(), [
 
-            'app_url' => ['required'],
-            'real_app_url' => ['required'],
             'framework_id' => ['required'],
             'user_app_name' => ['required'],
             'app_loc_in_server' => ['required']
