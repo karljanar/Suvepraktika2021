@@ -14,12 +14,7 @@ Haldustarkvara Pillow on loodud lehekülgede ja veebide tõhusamaks haldamiseks.
 Haldustarkvara Pillow on loodud Tallinna Ülikooli Digitehnoloogiate Instituudis tarkvaraarenduse projekti raames.
 
 ## Kasutatud tehnoloogiad
-**Raamistikud**
-Laravel
-<br>
-Vue 3
 
-**Keeled**
 Requirements for server:
 * Python >= 3.x with pip
 * Node >= v12.14
