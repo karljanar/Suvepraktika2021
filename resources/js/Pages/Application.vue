@@ -22,9 +22,11 @@
                             </div>
 
                         </div>
-                        <button @click="openModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa rakendus</button>
-                        <button v-if="isAdmin === 1" @click="openFrameworkModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa Raamistik</button>
 
+                        <td class="space-x-4 pb-8">
+                            <button @click="openModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa rakendus</button>
+                            <button v-if="isAdmin === 1" @click="openFrameworkModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa Raamistik</button>
+                        </td>
 
                         <table class="table-fixed w-full">
                             <thead>
@@ -35,10 +37,10 @@
                                 <th class="px-4 py-2 border-2 border-gray-200">Reaalne URL</th>
                                 <th class="px-4 py-2 border-2 border-gray-200">Praegune versioon</th>
                                 <th class="px-4 py-2 border-2 border-gray-200">Rakenduse asukoht serveris</th>
-                                <th class="px-4 py-2 border-2 border-gray-200">Kommentaarid</th>
                                 <th class="px-4 py-2 border-2 border-gray-200">Tellija</th>
                                 <th class="px-4 py-2 border-2 border-gray-200">Tehniline vastutaja</th>
                                 <th class="px-4 py-2 border-2 border-gray-200">Sisu vastutaja</th>
+                                <th class="px-4 py-2 border-2 border-gray-200">Kommentaarid</th>
                                 <th class="px-4 py-2 border-2 border-gray-200">Muuda</th>
                             </tr>
                             </thead>
@@ -53,37 +55,24 @@
                                 <td v-if="row.update_available === 1" class="bg-red-600 px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
                                 <td v-else class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.current_version }}</td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.app_loc_in_server }}</td>
-                                <td @click="commentsModal(row)" class="bg-gray-200 cursor-pointer px-2 py-2 w-1/4 border-4 border-blue-400">
-                                    Kommentaarid
-                                </td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.service_subscriber_name }}</td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.technical_supervisor_name }}</td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.content_supervisor_name }}</td>
-
-                                <td class="border flex space-x-4 px-1.5 py-2">
-                                    <button @click="edit(row)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Muuda</button>
-
-                                    <button v-if="isAdmin === 1" @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded">Kustuta</button>
+                                <td class="px-2 py-2 w-1/4 border-2 border-gray-200">
+                                    <button @click="commentsModal(row)" class="bg-green-500 hover:bg-green-700 text-sm text-white font-bold py-2.5 px-2.5 w-36 rounded">Kommentaarid</button>
+                                </td>
+                                <td class="px-2 py-2 w-1/4 border-2 border-gray-200">
+                                    <template v-for="email in notifications">
+                                    <template v-if="email.user_apps_id === row.id">
+                                        <template class="inline-flex">
+                                            <button v-if="isAdmin === 1" @click="edit(row, email)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 rounded-l">Muuda</button>
+                                            <button v-if="isAdmin === 1" @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded-r">Kustuta</button>
+                                            <button v-else @click="edit(row, email)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 w-36 rounded">Muuda</button>
+                                        </template>
+                                    </template>
+                                    </template>
 
                                 </td>
-                                <label>Emaili teavitused</label>
-                                <template v-for="email in notifications">
-
-                                    <input v-if="email.notification_enabled === 1 && email.user_apps_id === row.id"
-                                           checked
-                                           type="checkbox"
-                                           v-model="notifications_enabled"
-                                           @change="editNotification($event, row)"
-                                    >
-                                    <template v-else-if="email.notification_enabled !== 1">
-                                        <input v-if="email.user_apps_id === row.id"
-                                               type="checkbox"
-                                               v-model="notifications_enabled"
-                                               @change="editNotification($event, row)"
-                                        >
-
-                                    </template>
-                                </template>
                             </tr>
                             </tbody>
                         </table>
@@ -92,8 +81,6 @@
                         <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isCommentsModal">
 
                             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-
-
 
                                 <div class="fixed inset-0 transition-opacity">
 
@@ -119,7 +106,7 @@
 
                                                 </div>
                                                 <button @click="closeCommentsModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                                    Sule
+                                                    Sulge
                                                 </button>
                                             </div>
                                             </form>
@@ -146,7 +133,7 @@
                                             <div class="">
 
                                                 <div class="mb-4">
-                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistiku Nimetus</label>
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistiku Nimetus *</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_url"
                                                            placeholder="Raamistiku nimetus"
@@ -157,7 +144,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistiku versioon</label>
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistiku versioon *</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_url"
                                                            placeholder="Raamistiku versioon"
@@ -175,10 +162,12 @@
 
                                         <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
 
-                                            <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="saveFramework(form)">
-
-                                            Salvesta
-
+                                            <button v-if="form.new_framework_version && form.framework_name" wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="saveFramework(form)">
+                                                Salvesta
+                                            </button>
+                                            
+                                            <button v-else :disabled="true" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-gray-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="saveFramework(form)">
+                                                Salvesta
                                             </button>
 
                                         </span>
@@ -211,16 +200,16 @@
 
                                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>​
 
-                                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+                                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
 
                                     <form>
-
+                                        <p class="text-center pt-16">Tärniga märgitud väljad on kohustuslikud!</p>
                                         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
 
-                                            <div class="">
+                                            <div class="inline-grid grid-cols-2 gap-x-20">
 
                                                 <div class="mb-4">
-                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Nimetus</label>
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Nimetus *</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_url"
                                                            placeholder="Rakenduse nimetus"
@@ -231,7 +220,7 @@
                                                 </div>
 
                                                 <div class="mb-4" >
-                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistik</label>
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistik *</label>
                                                     <select name="framework_id" id="framework_id"
                                                             class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                             v-model="form.framework_id">
@@ -266,7 +255,7 @@
                                                 </div>
 
                                                 <div class="mb-4">
-                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Praegune Versioon</label>
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Praegune Versioon *</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="current_version"
                                                            placeholder="Praegune versioon..."
@@ -275,8 +264,9 @@
                                                     <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
                                                 </div>
 
+
                                                 <div class="mb-4">
-                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse Asukoht Serveris</label>
+                                                    <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse Asukoht Serveris *</label>
                                                     <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
                                                            name="app_loc_in_server"
                                                            placeholder="Rakenduse asukoht serveris..."
@@ -324,47 +314,66 @@
 
                                                     <div v-if="this.$page.props.errors.title" class="text-red-500">{{ this.$page.props.errors.title[0] }}</div>
                                                 </div>
+
+                                                <div v-if="editMode" class="inline-grid grid-cols-2 gap-x-80">
+                                                    <label class="block shadow-5xl w-80 italic placeholder-gray-500">Teavituste tellimiseks tehke märge kastis</label>
+                                                    <input
+                                                           type="checkbox" class="form-checkbox h-8 w-8 border-2 text-green-600 rounded cursor-pointer"
+                                                           v-if="emailNotificaitonForm.notification_enabled === 1"
+                                                           @change="emailNotificaitonForm.notification_enabled = 0"
+                                                           checked
+                                                    >
+                                                    <input
+                                                        type="checkbox" class="form-checkbox h-8 w-8 border-2 text-green-600 rounded cursor-pointer"
+                                                        v-else
+                                                        @change="emailNotificaitonForm.notification_enabled = 1"
+                                                    >
+                                                </div>
+
+
                                             </div>
                                         </div>
                                         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
 
-                            <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                            <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
 
-                              <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="!editMode" @click="save(form)">
+                                                <button v-if="form.user_app_name && form.framework_id && form.current_version && form.app_loc_in_server" wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="!editMode" @click="save(form)">   
+                                                    Salvesta 
+                                                </button>
 
-                                Salvesta
+                                                <button v-else :disabled="true" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-gray-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="!editMode" @click="save(form)">   
+                                                    Salvesta 
+                                                </button>
 
-                              </button>
-
-                            </span>
+                                            </span>
 
                                             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
 
-                              <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="editMode" @click="update(form)">
+                                                <button v-if="form.user_app_name && form.framework_id && form.current_version && form.app_loc_in_server" wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="editMode" @click="update(form, emailNotificaitonForm)">
+                                                    Muuda
+                                                </button>
+                                              
+                                                <button v-else :disabled="true" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-gray-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="editMode" @click="update(form)">
+                                                   Muuda
+                                                </button>
 
-                                Muuda
-
-                              </button>
-
-                            </span>
+                                            </span>
 
                                             <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
 
 
 
-                              <button @click="closeModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                              <button @click="closeModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
 
-                                Tühista
+                                                Tühista
 
-                              </button>
+                                              </button>
 
-                            </span>
+                                            </span>
 
                                         </div>
 
                                     </form>
-
-
 
                                 </div>
 
@@ -392,10 +401,12 @@ import { ref } from 'vue';
 
 import Modal from "@/Jetstream/Modal";
 import Label from "@/Jetstream/Label";
+import Button from "@/Jetstream/Button";
 
 export default {
 
     components: {
+        Button,
         Label,
         Modal,
 
@@ -408,7 +419,7 @@ export default {
     props: ['apps', 'framework', 'errors', 'isAdmin', 'notifications'],
 
     setup () {
-       // /
+        // /
     },
 
 
@@ -450,7 +461,13 @@ export default {
 
                 framework_name: null,
 
-                new_framework_version: null
+                new_framework_version: null,
+
+
+            },
+
+            emailNotificaitonForm:{
+                notification_enabled: null
             }
 
         }
@@ -458,6 +475,7 @@ export default {
     },
 
     methods: {
+
 
         openFrameworkModal: function(){
             this.isFrameworkModal = true;
@@ -530,8 +548,12 @@ export default {
 
                 framework_name: null,
 
-                new_framework_version: null
+                new_framework_version: null,
 
+
+            };
+            this.emailNotificaitonForm = {
+                notification_enabled: null
             }
 
         },
@@ -559,9 +581,11 @@ export default {
 
         },
 
-        edit: function (data) {
+        edit: function (data, email) {
 
             this.form = Object.assign({}, data);
+
+            this.emailNotificaitonForm = Object.assign({}, email);
 
             this.editMode = true;
 
@@ -569,11 +593,11 @@ export default {
 
         },
 
-        update: function (data) {
+        update: function (data, emailNotification) {
 
             data._method = 'PATCH';
 
-            this.$inertia.patch('/apps/edit/' + data.id, data)
+            this.$inertia.post('/apps/edit/' + emailNotification.notification_enabled, data);
 
             this.reset();
 
@@ -582,12 +606,15 @@ export default {
         },
 
 
-        editNotification: function (event, data) {
+        editNotification: function (data) {
 
             data._method = 'PATCH';
 
-            this.$inertia.patch('/apps/editNotification/' + data.id, this.notifications_enabled);
+            this.$inertia.post('/apps/editNotification/' + data.user_apps_id, data);
 
+            this.reset();
+
+            this.closeModal();
 
         },
 
@@ -610,3 +637,9 @@ export default {
 
 </script>
 
+<style>
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #48bb78;
+}
+</style>
