@@ -42,3 +42,8 @@ $ php artisan view:cache
 $ php artisan migrate:fresh --seed
 ```
 
+* Adding cron job to server
+```
+$ * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+````
+
