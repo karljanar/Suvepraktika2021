@@ -2,7 +2,7 @@
 ## Server Requirements
 Requirements for server:
 * Python >= 3.x
-* vuejs / vue-loader ^16.1.2
+* Node >= v12.14
 * PHP >= 7.3
 * BCMath PHP Extension
 * Ctype PHP Extension
