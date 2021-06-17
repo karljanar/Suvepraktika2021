@@ -19,7 +19,10 @@ Vue 3
 **Keeled**
 Javascript
 CSS
+<br>
 PHP 7.4
+<br>
+Python 3
 
 
 ## Projekti loojad
