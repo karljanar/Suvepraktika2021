@@ -24,9 +24,9 @@ PHP 7.4
 
 ## Projekti loojad
 
-**Karl Janar Kinkar**
-**Margo Narõškin**
-**Karl Tüksammel**
+**Karl Janar Kinkar** ,
+**Margo Narõškin** ,
+**Karl Tüksammel** ,
 **Torm Erik Raudvee**
 
 ## Paigaldusjuhised
