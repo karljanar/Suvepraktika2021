@@ -499,6 +499,8 @@ export default {
         closeCommentsModal: function () {
 
             this.isCommentsModal = false;
+            
+            this.reset();
 
         },
 
