@@ -26,6 +26,7 @@ $ git clone https://github.com/karljanar/Suvepraktika2021.git
 $ cd Suvepraktika2021
 $ composer install --optimize-autoloader --no-dev
 $ npm install
+$ npm run prod
 $ pip install -r requirements.txt 
 ```
 * Create mysql database, then
@@ -35,9 +36,6 @@ $ vim .env
 ```
 * Edit .env to your needs, DB_CONNECTION must be mysql, MAIL_* have to be filled.
 ```
-$ php artisan config:cache
-$ php artisan route:cache
-$ php artisan view:cache
 $ php artisan migrate:fresh --seed
 ```
 
@@ -45,4 +43,21 @@ $ php artisan migrate:fresh --seed
 ```
 $ * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 ````
+
+* Give permission to /bootsrap and /storage/logs
+* try:
+```
+$ chmod -R gu+w storage/
+$ chmod -R guo+w storage/
+$ chmod -R gu+w bootstrap/cache/
+$ chmod -R guo+w bootstrap/cache/
+$ chmod -R gu+w .env
+$ chmod -R guo+w .env
+```
+```
+$ php artisan key:generate
+```
+* For next steps follow: https://laravel.com/docs/8.x/deployment
+
+
 
