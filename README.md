@@ -25,7 +25,6 @@ Installing requirements:
 $ git clone https://github.com/karljanar/Suvepraktika2021.git
 $ cd Suvepraktika2021
 $ composer install --optimize-autoloader --no-dev
-$ composer update
 $ npm install
 $ pip install -r requirements.txt 
 ```
