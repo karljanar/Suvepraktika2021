@@ -14,15 +14,25 @@ Haldustarkvara Pillow on loodud Tallinna Ülikooli Digitehnoloogiate Instituudis
 ## Kasutatud tehnoloogiad
 **Raamistikud**
 Laravel
+<br>
 Vue 3
 
 **Keeled**
-Javascript
-CSS
-<br>
-PHP 7.4
-<br>
-Python 3
+Requirements for server:
+* Python >= 3.x with pip
+* Node >= v12.14
+* PHP >= 7.3
+* BCMath PHP Extension
+* Ctype PHP Extension
+* Fileinfo PHP Extension
+* JSON PHP Extension
+* Mbstring PHP Extension
+* OpenSSL PHP Extension
+* PDO PHP Extension
+* Tokenizer PHP Extension
+* XML PHP Extension
+* Composer
+* MySQL 5.7+
 
 
 ## Projekti loojad
