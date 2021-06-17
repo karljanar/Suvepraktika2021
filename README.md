@@ -1,7 +1,7 @@
 
 ## Server Requirements
 Requirements for server:
-* Python >= 3.x
+* Python >= 3.x with pip
 * Node >= v12.14
 * PHP >= 7.3
 * BCMath PHP Extension
