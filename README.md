@@ -25,9 +25,10 @@ Installing requirements:
 $ git clone https://github.com/karljanar/Suvepraktika2021.git
 $ cd Suvepraktika2021
 $ composer install --optimize-autoloader --no-dev
-$ npm install
-$ npm run prod
+$ npm install --production
 $ pip install -r requirements.txt 
+or
+$ pip3 install -r requirements.txt 
 ```
 * Create mysql database, then
 ```
