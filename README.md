@@ -1,3 +1,54 @@
+# Haldustarkvara Pillow
+
+Haldustarkvara Pillow on loodud lehekülgede ja veebide tõhusamaks haldamiseks. Pakkudes kasutajale graafilist liidest vajaliku infoga teeb see haldamise lihtsaks ja mugavaks. Samuti on kasutajal võimalus tellida teavitusi kui mõnel tema haldaval rakendusel on tulnud raamistikule uuendus.
+
+
+# Pildid
+
+**Siia tulevad pildid!** ekraanipilti või eraldi loodud pilti lahendusest – ekraanipilt peab olema samas repos, et nad üks hetk ära eikaoks (ära tee väga suuri pilte!)
+
+## 
+
+Haldustarkvara Pillow on loodud Tallinna Ülikooli Digitehnoloogiate Instituudis tarkvaraarenduse projekti raames.
+
+## Kasutatud tehnoloogiad
+**Raamistikud**
+Laravel
+Vue 3
+
+**Keeled**
+Javascript
+CSS
+PHP 7.4
+
+
+## Projekti loojad
+
+**Karl Janar Kinkar**
+**Margo Narõškin**
+**Karl Tüksammel**
+**Torm Erik Raudvee**
+
+## Paigaldusjuhised
+
+`commandid\kood siia `
+
+## Litsents
+**MIT Licence**
+
+Copyright (c) 2021 Karl Janar Kinkar
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
