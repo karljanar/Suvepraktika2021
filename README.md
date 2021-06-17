@@ -69,7 +69,7 @@ $ php artisan migrate:fresh --seed
 $ * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 ````
 
-* If neede, give permission to /bootsrap , /storage/logs and .env file
+* If needed, give permission to /bootsrap , /storage/logs and .env file
 * try:
 ```
 $ chmod -R gu+w storage/
