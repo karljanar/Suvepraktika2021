@@ -28,7 +28,7 @@
                             <button v-if="isAdmin === 1" @click="openFrameworkModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 text-center">Lisa Raamistik</button>
                         </td>
 
-                        <table class="table-fixed w-full">
+                        <table class="table-fixed w-full break-words">
                             <thead>
                             <tr class="bg-gray-100">
                                 <th class="px-4 py-2 border-2 border-gray-200 ">Nimetus</th>
@@ -59,16 +59,14 @@
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.technical_supervisor_name }}</td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">{{ row.content_supervisor_name }}</td>
                                 <td class="px-2 py-2 w-1/4 border-2 border-gray-200">
-                                    <button @click="commentsModal(row)" class="bg-green-500 hover:bg-green-700 text-sm text-white font-bold py-2.5 px-2.5 w-36 rounded">Kommentaarid</button>
+                                    <button @click="commentsModal(row)" class="bg-green-500 hover:bg-green-700 text-sm text-white font-bold py-2.5 px-2.5 w-full rounded">Kommentaarid</button>
                                 </td>
-                                <td class="px-2 py-2 w-1/4 border-2 border-gray-200">
+                                <td class="px-2 py-2 w-1/4 border-2 border-gray-200 space-y-2">
                                     <template v-for="email in notifications">
                                     <template v-if="email.user_apps_id === row.id">
-                                        <template class="inline-flex">
-                                            <button v-if="isAdmin === 1" @click="edit(row, email)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 rounded-l">Muuda</button>
-                                            <button v-if="isAdmin === 1" @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 rounded-r">Kustuta</button>
-                                            <button v-else @click="edit(row, email)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 w-36 rounded">Muuda</button>
-                                        </template>
+                                        <button v-if="isAdmin === 1" @click="edit(row, email)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 w-full rounded">Muuda</button>
+                                        <button v-if="isAdmin === 1" @click="deleteRow(row)" class="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2.5 px-2.5 w-full rounded">Kustuta</button>
+                                        <button v-else @click="edit(row, email)" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2.5 px-2.5 w-full rounded">Muuda</button>
                                     </template>
                                     </template>
 
@@ -94,23 +92,18 @@
 
                                 <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
 
-
-
-                                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                            <form>
+                                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                        <form>
                                             <div class="">
-
                                                 <div class="mb-4">
-
-                                                    <p>{{form.comments}}</p>
-
+                                                    <p style="white-space: pre-wrap;">{{ commentSplit }}</p>
                                                 </div>
                                                 <button @click="closeCommentsModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                                     Sulge
                                                 </button>
                                             </div>
-                                            </form>
-                                        </div>
+                                        </form>
+                                    </div>
                                 </div>
 
                             </div>
@@ -165,7 +158,7 @@
                                             <button v-if="form.new_framework_version && form.framework_name" wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="saveFramework(form)">
                                                 Salvesta
                                             </button>
-                                            
+
                                             <button v-else :disabled="true" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-gray-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="saveFramework(form)">
                                                 Salvesta
                                             </button>
@@ -203,14 +196,14 @@
                                 <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
 
                                     <form>
-                                        <p class="text-center pt-16">Tärniga märgitud väljad on kohustuslikud!</p>
+                                        <p class="text-left ml-6 pt-16 font-bold">Tärniga märgitud väljad on kohustuslikud!</p>
                                         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
 
                                             <div class="inline-grid grid-cols-2 gap-x-20">
 
                                                 <div class="mb-4">
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Nimetus *</label>
-                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                            name="app_url"
                                                            placeholder="Rakenduse nimetus"
                                                            v-model="form.user_app_name">
@@ -222,7 +215,7 @@
                                                 <div class="mb-4" >
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Raamistik *</label>
                                                     <select name="framework_id" id="framework_id"
-                                                            class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                            class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                             v-model="form.framework_id">
 
                                                         <option v-for="val in framework" :value="val.id">{{val.framework_name}}</option>
@@ -235,7 +228,7 @@
 
                                                 <div class="mb-4">
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse URL</label>
-                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                            name="app_url"
                                                            placeholder="Rakenduse URL..."
                                                            v-model="form.app_url">
@@ -246,7 +239,7 @@
 
                                                 <div class="mb-4">
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse Reaalne URL</label>
-                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                            name="real_app_url"
                                                            placeholder="Rakenduse tegelik URL..."
                                                            v-model="form.real_app_url">
@@ -256,7 +249,7 @@
 
                                                 <div class="mb-4">
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Praegune Versioon *</label>
-                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                            name="current_version"
                                                            placeholder="Praegune versioon..."
                                                            v-model="form.current_version">
@@ -267,7 +260,7 @@
 
                                                 <div class="mb-4">
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse Asukoht Serveris *</label>
-                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                            name="app_loc_in_server"
                                                            placeholder="Rakenduse asukoht serveris..."
                                                            v-model="form.app_loc_in_server">
@@ -278,7 +271,7 @@
                                                 <div class="mb-4">
 
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Kommentaarid</label>
-                                                    <textarea class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <textarea class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                               name="comments" placeholder="Kommentaarid..."
                                                               v-model="form.comments"> </textarea>
 
@@ -287,7 +280,7 @@
 
                                                 <div class="mb-4">
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Rakenduse Tellija</label>
-                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                            name="service_subscriber_name"
                                                            placeholder="Rakenduse tellija nimi..."
                                                            v-model="form.service_subscriber_name">
@@ -297,7 +290,7 @@
 
                                                 <div class="mb-4">
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Tehniline Vastutaja</label>
-                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                            name="technical_supervisor_name"
                                                            placeholder="Rakenduse tehniline vastutaja..."
                                                            v-model="form.technical_supervisor_name">
@@ -307,7 +300,7 @@
 
                                                 <div class="mb-4">
                                                     <label class="block shadow-5xl  w-80 italic placeholder-gray-500">Sisu Vastutaja</label>
-                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500"
+                                                    <input type="text" class="block shadow-5xl mb-10 p-2 w-80 italic placeholder-gray-500 rounded"
                                                            name="content_supervisor_name"
                                                            placeholder="Rakenduse sisu vastutaja..."
                                                            v-model="form.content_supervisor_name">
@@ -316,7 +309,7 @@
                                                 </div>
 
                                                 <div v-if="editMode" class="inline-grid grid-cols-2 gap-x-80">
-                                                    <label class="block shadow-5xl w-80 italic placeholder-gray-500">Teavituste tellimiseks tehke märge kastis</label>
+                                                    <label class="block shadow-5xl w-80 font-bold ">Teavituste tellimiseks tehke märge kastis</label>
                                                     <input
                                                            type="checkbox" class="form-checkbox h-8 w-8 border-2 text-green-600 rounded cursor-pointer"
                                                            v-if="emailNotificaitonForm.notification_enabled === 1"
@@ -337,12 +330,12 @@
 
                                             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
 
-                                                <button v-if="form.user_app_name && form.framework_id && form.current_version && form.app_loc_in_server" wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="!editMode" @click="save(form)">   
-                                                    Salvesta 
+                                                <button v-if="form.user_app_name && form.framework_id && form.current_version && form.app_loc_in_server" wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="!editMode" @click="save(form)">
+                                                    Salvesta
                                                 </button>
 
-                                                <button v-else :disabled="true" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-gray-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="!editMode" @click="save(form)">   
-                                                    Salvesta 
+                                                <button v-else :disabled="true" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-gray-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="!editMode" @click="save(form)">
+                                                    Salvesta
                                                 </button>
 
                                             </span>
@@ -352,7 +345,7 @@
                                                 <button v-if="form.user_app_name && form.framework_id && form.current_version && form.app_loc_in_server" wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="editMode" @click="update(form, emailNotificaitonForm)">
                                                     Muuda
                                                 </button>
-                                              
+
                                                 <button v-else :disabled="true" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-gray-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" v-show="editMode" @click="update(form)">
                                                    Muuda
                                                 </button>
@@ -361,12 +354,8 @@
 
                                             <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
 
-
-
                                               <button @click="closeModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-
                                                 Tühista
-
                                               </button>
 
                                             </span>
@@ -418,10 +407,6 @@ export default {
 
     props: ['apps', 'framework', 'errors', 'isAdmin', 'notifications'],
 
-    setup () {
-        // /
-    },
-
 
     data() {
 
@@ -472,6 +457,14 @@ export default {
 
         }
 
+    },
+
+    computed: {
+        commentSplit: function() {
+
+            return this.form.comments.split('[');
+
+        }
     },
 
     methods: {
@@ -636,10 +629,3 @@ export default {
 }
 
 </script>
-
-<style>
-input:checked ~ .dot {
-  transform: translateX(100%);
-  background-color: #48bb78;
-}
-</style>
