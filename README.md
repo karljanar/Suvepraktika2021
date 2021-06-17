@@ -29,7 +29,7 @@ $ composer update
 $ npm install
 $ pip install -r requirements.txt 
 ```
-* Create mysql database
+* Create mysql database, then
 ```
 $ cp .env.exapmle .env
 $ vim .env
