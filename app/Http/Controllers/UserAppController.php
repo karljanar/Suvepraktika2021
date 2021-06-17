@@ -165,7 +165,7 @@ class UserAppController extends Controller
         var_dump(strlen($new_comment));
         $comment_time = Carbon::now()->format('d-m-Y H:i:s');
         $username = (string)$request->user()->name;
-        $username = "[" . $comment_time . ", " . $username . "]: ";
+        $username = "[" . $comment_time . ", " . $username . ": ";
         //dd('e');
         if (strlen($old_comment) != strlen($new_comment)) {
 
