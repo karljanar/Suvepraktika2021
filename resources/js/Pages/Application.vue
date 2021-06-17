@@ -500,7 +500,7 @@ export default {
 
             this.isCommentsModal = false;
             
-            this.reset();
+            
 
         },
 
