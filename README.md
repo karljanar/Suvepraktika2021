@@ -30,7 +30,7 @@ $ pip install -r requirements.txt
 ```
 * Create mysql database, then
 ```
-$ cp .env.exapmle .env
+$ cp .env.example .env
 $ vim .env
 ```
 * Edit .env to your needs, DB_CONNECTION must be mysql, MAIL_* have to be filled.
