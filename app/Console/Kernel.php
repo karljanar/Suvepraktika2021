@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
                     DB::update('update frameworks set new_framework_version = ?, updated_at = ? where id = ?', [$result_array[0][($framework->id) - 1] , now(),$framework->id]);
                 }
             }
-        })->everyMinute();
+        })->dailyAt('8:00');
 
 
         $schedule->call(function () {
@@ -131,7 +131,7 @@ class Kernel extends ConsoleKernel
                 unset($single_email[$array_key]);
             }
             //When does this task run https://laravel.com/docs/8.x/scheduling
-        })->everyMinute();
+        })->dailyAt('8:01');
 
 
 
